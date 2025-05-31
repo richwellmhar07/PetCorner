@@ -1,0 +1,716 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.mainnavbar{
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    background-color: #efefe4;
+    top: 0px;
+   
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    height: 80px;
+    background-color: #2f2f30 !important;
+}
+
+.logo {
+    padding-top: 40px;
+}
+
+nav {
+    flex: 1;
+    text-align: right;
+}
+
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+input {
+    width: 50%;
+    height: 35px;
+    padding: 2px;
+}
+
+.custom-search input#search {
+    width: 500px !important; /* Custom width with !important */
+    border-radius: 10px;
+    border: solid 1px;
+    padding-left: 10px;
+    padding-right: 40px; /* Add padding to the right for the icon */
+}
+
+.input-group {
+    position: relative; /* Position relative to place icon inside input */
+}
+
+/* Position the search icon inside the input */
+.input-group-text {
+    position: absolute;
+    top: 50%; /* Vertically center the icon */
+    right: 10px; /* Position from the right */
+    transform: translateY(-50%);
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+    padding: 0;
+}
+
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust color (optional) */
+    transition: transform 0.3s ease; /* Smooth transition on hover */
+}
+
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(100%); /* Fully invert the color on hover */
+}
+
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black; /* Change the color to black */
+    font-size: 15px;
+}
+
+.NavSubButtons ul li a:hover {
+    color: #412ef0;
+    cursor: pointer;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+@media (max-width: 768px) {
+    .navbar-brand img {
+        width: 150px;
+    }
+    nav ul {
+        text-align: left;
+        padding-top: 20px;
+    }
+    .input-group-prepend {
+        display: none;
+    }
+    .input-field {
+        width: 100%;
+    }
+}
+
+.NavSubButtons {
+    flex: 1;
+    text-align: center;
+    background-color: #ffc107;
+}
+
+.NavSubButtons ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 5px 0;
+    font-weight: 800;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.NavSubButtons ul li {
+    display: inline-block;
+    margin-right: 100px;
+}
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black; /* Change the color to black */
+    font-size: 15px;
+}
+
+.NavSubButtons ul li a:hover {
+    color: #412ef0;
+    cursor: pointer;
+}
+
+/* Default link color in the navbar */
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff; /* White color by default */
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+}
+
+/* Link color when hovered */
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #fbfbfb; /* Yellowish color when hovered */
+}
+
+/* Update the search icon color */
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust initial color (lighten) */
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Change the icon color on hover */
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+
+/* Icon buttons in the navbar */
+.navbar-nav .nav-link img {
+    width: 23px;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+    filter: invert(5%); /* Adjust initial color (lighten) */
+}
+
+/* Enlarge the icon and change color on hover */
+.navbar-nav .nav-link img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    height: 80px;
+    background-color: #2f2f30 !important;
+}
+
+.logo {
+    padding-top: 40px;
+}
+
+nav {
+    flex: 1;
+    text-align: right;
+}
+
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+input {
+    width: 50%;
+    height: 35px;
+    padding: 2px;
+}
+
+.custom-search input#search {
+    width: 500px !important; /* Custom width with !important */
+    border-radius: 10px;
+    border: solid 1px;
+    padding-left: 10px;
+    padding-right: 40px; /* Add padding to the right for the icon */
+}
+
+.input-group {
+    position: relative; /* Position relative to place icon inside input */
+}
+
+/* Position the search icon inside the input */
+.input-group-text {
+    position: absolute;
+    top: 50%; /* Vertically center the icon */
+    right: 10px; /* Position from the right */
+    transform: translateY(-50%);
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+    padding: 0;
+}
+
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust color (optional) */
+    transition: transform 0.3s ease; /* Smooth transition on hover */
+}
+
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(100%); /* Fully invert the color on hover */
+}
+
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black; /* Change the color to black */
+    font-size: 15px;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+@media (max-width: 768px) {
+    .navbar-brand img {
+        width: 150px;
+    }
+    nav ul {
+        text-align: left;
+        padding-top: 20px;
+    }
+    .input-group-prepend {
+        display: none;
+    }
+    .input-field {
+        width: 100%;
+    }
+}
+
+.NavSubButtons ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 5px 0;
+    font-weight: 800;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.NavSubButtons ul li {
+    display: inline-block;
+    margin-right: 100px;
+}
+
+/* Default link color in the navbar */
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff; /* White color by default */
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+}
+
+/* Link color when hovered */
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #ffc107; /* Yellowish color when hovered */
+}
+
+/* Update the search icon color */
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust initial color (lighten) */
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Change the icon color on hover */
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+
+/* Icon buttons in the navbar */
+.navbar-nav .nav-link img {
+    width: 23px;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+    filter: invert(5%); /* Adjust initial color (lighten) */
+}
+
+/* Enlarge the icon and change color on hover */
+.navbar-nav .nav-link img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+
+/* Start of cart table CSS */
+
+.cart-container {
+    max-width: 1000px;
+    margin: auto;
+    background-color: #ffffff;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 150px;
+    border-radius: 12px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border: none;
+    overflow: hidden;
+}
+
+.cart-table th {
+    background-color:  #333;
+    color: #ffffff;
+    padding: 15px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.cart-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-table tr:last-child td {
+    border-bottom: none;
+}
+
+.delete-btn:focus {
+    outline: none;
+}
+
+.product-cell {
+    display: flex;
+    align-items: left;
+    gap: 10px;
+}
+
+.product-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.quantity {
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+#checkout-btn {
+    
+    background-color: #ffc107;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#checkout-btn:hover {
+    background-color: #f8a618;
+    transform: scale(1.05);
+}
+#checkout-btn:focus{
+    outline: none;
+}
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.delete-btn img {
+    filter: invert(30%);
+}
+
+.delete-btn:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.empty-cart-message {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 20px;
+}
+
+
+.cart-table th, .cart-table td {
+    padding: 15px;
+    text-align: center;
+}
+
+.cart-checkbox{
+    width: 23%;
+}
+
+.item-checkbox {
+    transform: scale(1.2); /* Make checkboxes slightly larger */
+    cursor: pointer;
+}
+
+#select-all {
+    transform: scale(1.2); /* Make 'Select All' checkbox slightly larger */
+    cursor: pointer;
+}
+
+/****************************** Notification Modal Styles ******************************/
+
+.modal-content {
+    display: flex;
+    border-radius: 10px;
+    width: 420px; 
+    max-width: 500px; 
+    padding: 15px;
+    overflow: hidden;
+    margin-left: auto;
+    margin-top: 8vh;
+    height: 85vh;
+    overflow-y: auto;
+}
+
+/* Modal Body */
+.modal-body {
+    max-height: 65vh;  /* Limit the height of modal-body */
+    overflow-y: auto;  /* Make only the body scrollable */
+    padding-right: 15px;  /* Add some padding to avoid cutting off the scrollbar */
+}
+
+/* Fix the modal header */
+.modal-header {
+    position: sticky;  /* Keep it fixed at the top of the modal */
+    top: 0;  /* Stick it to the top of the modal */
+    background-color: #fff;  /* Ensure the background color is solid */
+    z-index: 10;  /* Make sure it's above the scrollable content */
+}
+
+
+
+.modal-body.custom-body {
+    padding: 5px;
+    text-align: left;
+    max-height: 80vh; 
+    overflow-y: auto; 
+}
+
+/* Notification Item */
+.notification-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notification-item:hover {
+    background-color: #b8b8b8;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+
+.notification-link {
+    text-decoration: none;
+    color: inherit;  
+}
+
+
+.notification-item:hover .notification-link p {
+    color: #0a008f;  
+}
+
+
+
+.notification-item i {
+    color: #007bff;  
+
+}
+
+.notification-item i:hover {
+    color: #0056b3;  
+}
+
+.notification-item a {
+    text-decoration: none;
+    color: #333;
+}
+
+.notification-item a:hover {
+    color: #007bff; 
+}
+
+
+
+.modal-title {
+    padding-top: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.close {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Styling for Notification Text */
+.notification-link {
+    font-size: 16px;
+    color: #ff0000;
+}
+
+.notification-link p {
+    margin-bottom: 5px;
+}
+
+.notification-link small {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* If no notifications, message style */
+.modal-body p {
+    font-size: 14px;
+    color: #2a9bff;
+    text-align: center;
+}
+
+/* Media Query to Adjust for Small Screens */
+@media (max-width: 576px) {
+    .modal-content {
+        width: 90%; /* Adjust modal width for small screens */
+    }
+
+    .modal-header {
+        text-align: center;
+    }
+}
+
+.modal-right .modal-dialog {
+    position: fixed;
+    top: 20px;
+    right: 40px;
+    margin: 0;
+    width: 400px; /* Adjust the width as needed */
+    height: 100%;
+    max-width: 90%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal-right .modal-content {
+    height: 100%;
+    border-radius: 10px; /* Remove rounded corners */
+    border: none; /* Remove border */
+}
+
+.modal-right.show .modal-dialog {
+    transform: translateX(0); /* Slide in from the right */
+}
+
+
+/******************** modal style *****************/
+
+/*************** This code is for the close button in the product modal **************/
+.modal .close {
+    color: #383838; 
+    font-size: 1.5rem;
+    opacity: 0.8; 
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.modal .close:hover {
+    color: #363634; 
+    opacity: 1; 
+    transform: scale(1.2);
+    cursor: pointer;
+}
+.modal .close:focus {
+    outline: none; 
+}
+/*************** This code is for the close button in the product modal **************/
+
+.checkout-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute header, body, and footer evenly */
+    width: 80%; /* Adjust to your desired width */
+    max-width: 900px; /* Restrict maximum width */
+    height: auto; /* Allow content to adjust dynamically */
+    min-height: 300px; /* Set a minimum height to avoid shrinking */
+    padding: 20px;
+    margin: auto;
+    border-radius: 15px;
+}
+
+.checkout-modal .modal-body {
+    margin-bottom: 0; /* Remove any bottom margin */
+    padding: 20px; /* Restore adequate padding for content */
+    max-height: 75vh; /* Ensure vertical scrollability for overflow content */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    background-color: #f8f9fa;
+}
+
+.checkout-modal .modal-footer {
+    justify-content: flex-end;
+    margin: 0;
+    padding: 10px 20px; /* Ensure consistent padding */
+    height: auto;
+}
+
+.modal-footer button {
+    margin: 10px; /* Remove extra margins */
+    padding: 8px 16px; /* Standardize button padding */
+    border-radius: 25px;
+    background-color: #ffc107;
+    border: none;
+}
+
+.modal-footer button:hover{
+    background-color: #f8a618;
+}
+
+.btn-secondary{
+    width: 128px;
+}
+
+.btn-secondary:hover{
+    background-color: #f8a618;
+}
+
+.modalbody p {
+    text-align: left;
+    color: #242424;
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Order Confirmation</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='orderconfirm.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="mainnavbar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" id="Homepage">
+            <a class="navbar-brand" href="{{ url_for('show_products')}}">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Search Bar -->
+                <form class="form-inline my-2 my-lg-0 mx-auto custom-search">
+                    <div class="input-group">
+                        <input class="form-control" type="search" id="search" name="search" placeholder="Search here..">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="search-icon">
+                                <img src="{{ url_for('static', filename='images/search.svg') }}" width="25px" alt="Search Icon">
+                            </span>
+                        </div>
+                    </div>
+                </form>
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#" title="notification">
+                        <img src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="25px"alt="notification"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('cart')}}" title="cart">
+                        <img src="{{ url_for('static', filename='images/cart-solid.svg') }}" width="28px" alt="cart"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('my_orders')}}" title="my orders">
+                        <img src="{{ url_for('static', filename='images/order.png') }}" width="25px" alt="my orders"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account')}}" title="account">
+                        <img src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px" alt="Account"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout" onclick="confirmLogout(event);">
+                        <img src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="23px" alt="logout"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Nav Sub Buttons -->
+        <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}" id="homebtn">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}" id="productsbtn">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="" id="categoriesbtn">Categories</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="confirmation-container">
+        <!-- Checkmark Icon -->
+        <div class="checkmark-circle">
+            <span>&#10003;</span>
+        </div>
+    
+        <h1>Thank You for Your Order!</h1>
+        <p>Your order has been successfully placed.</p>
+    
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+        
+            {% for item in order_data['ordered_items'] %}
+            <div class="summary-item">
+                <!-- <img src="{{ url_for('static', filename='images/' + (item['productimage'] if item['productimage'] else 'default.jpg')) }}"
+                 alt="Product Image" class="product-image"> -->
+                <span>{{ item['productname'] }}</span>
+                <span>₱{{ item['productprice'] }}</span>
+                <span>Qty: {{ item['productqty'] }}</span>
+                <span>₱{{ item['subtotal'] }}</span> <!-- Display the subtotal -->
+            </div>
+            {% endfor %}
+        
+            <div class="summary-item">
+                <span>Shipping Fee</span>
+                <span>₱{{ order_data['shipping_fee'] }}</span>  <!-- Display dynamic shipping fee -->
+            </div>
+        
+            <div class="summary-item total">
+                <span>Total Amount</span>
+                <span>₱{{ order_data['total_amount'] }}</span>  <!-- Display updated total with shipping -->
+            </div>
+        </div>
+    </div>
+    
+    
+        
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+

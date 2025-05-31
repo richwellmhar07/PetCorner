@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Seller - Cancellation Requests</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='requests.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="mainnavbar">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px"
+                    alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('seller') }}" title="home"><img
+                        src="{{ url_for('static', filename='images/house-solid.svg') }}" width="23px"
+                        alt="Account"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" title="notification"><img
+                                src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                                alt="Account"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('accountseller') }}" title="account"><img
+                                src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px"
+                                alt="Account"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout"
+                            onclick="confirmLogout(event);"><img
+                                src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="24px"
+                                alt="logout"></a></li>
+
+                </ul>
+            </div>
+        </nav>
+        <!-- Nav Sub Buttons -->
+        <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('seller') }}" id="homebtn">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('orders') }}" id="ordersbtn">Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('requests') }}" id="requestsbtn" style="color: blue;">Requests</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('sellersales') }}" id="sellersalesbtn">Sales Report</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-------------------- Modal for Notification ------------------->
+    
+    <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <div class="notification-item mb-3">
+                                <a href="{{ notification['link'] }}" class="notification-link">
+                                    <p><strong>{{ notification['message'] }}</strong></p>
+                                    <small class="text-muted">{{ notification['created_at'] }}</small>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No new notifications.</p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div> 
+
+
+    <!-------------------- Modal for Disapproval ------------------->
+
+    <div id="disapproveModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="disapproveModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="disapproveForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="disapproveModalLabel">Disapprove Cancellation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Reason for disapproval -->
+                        <div class="form-group">
+                            <label for="disapproveReason">Reason:</label>
+                            <select id="disapproveReason" name="disapprove_reason" class="form-control">
+                                <option value="Item is ready to Ship">Item is ready to Ship</option>
+                                <option value="Fraudulent">Fraudulent</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div id="otherReasonContainer" class="form-group" style="display: none;">
+                            <label for="otherReasonInput">Other reason:</label>
+                            <input type="text" id="otherReasonInput" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Disapprove</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    <!--------------------Order Cancel Requests Table-------------------->
+
+    <div class="cancelordertable">
+        <div class="container mt-5">
+            <h4 class="text-center mb-4">Requests</h4>
+    
+            <!-- Search Field -->
+            <form class="form-inline my-2 my-lg-0 custom-search">
+                <div class="input-group">
+                    <input
+                        class="form-control"
+                        type="search"
+                        id="search"
+                        name="search"
+                        placeholder="Search here.."
+                        style="margin-bottom: 30px;"
+                        onkeyup="searchTable()"
+                    >
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="search-icon">
+                            <img
+                                src="{{ url_for('static', filename='images/search.svg') }}"
+                                width="25px"
+                                alt="Search Icon"
+                                style="display: none;"
+                            >
+                        </span>
+                    </div>
+                </div>
+            </form>
+    
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="cancelOrdersTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>OID</th>
+                            <th>User ID</th>
+                            <th>Buyer</th>
+                            <th>Ordered Date</th>
+                            <th>Request Date</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in cancel_requests_data %}
+                        <tr>
+                            <td>{{ request.order_id }}</td>
+                            <td>{{ request.user_id }}</td>
+                            <td>{{ request.name }}</td>
+                            <td>{{ request.ordered_date }}</td>
+                            <td>{{ request.request_date }}</td>
+                            <td>{{ request.reason }}</td>
+                            <td>{{ request.status }}</td>
+                            <td>
+                                {% if request.status == 'Pending' %}
+                                <button class="btn btn-success btn-approve" data-order-id="{{ request.order_id }}">Approve</button>
+                                <button class="btn btn-danger btn-disapprove" data-order-id="{{ request.order_id }}">Disapprove</button>
+                                {% else %}
+                                <span class="text-muted">N/A</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function confirmLogout() {
+        if (confirm("Are you sure you want to log out?")) {
+            window.location.href = "{{ url_for('login') }}";
+        }
+    }
+    </script>
+
+    <script>  // for notification
+        document.querySelector("[title='notification']").addEventListener("click", function(event) {
+            event.preventDefault();
+            $('#notificationModal').modal('show');
+        });
+    </script>
+
+    <script> // for notification
+
+        function checkForNewApplications() {
+            fetch('/seller')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.newApplications) {
+                        // Display notification modal
+                        document.getElementById('notificationModal').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error checking new applications:', error));
+        }
+
+        // Poll the server every 10 seconds
+        setInterval(checkForNewApplications, 10000);
+
+    </script>
+
+    <!-- Search product JS -->
+
+    <script>
+        function searchTable() {
+            const input = document.getElementById("search");
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById("cancelOrdersTable");
+            const rows = table.getElementsByTagName("tr");
+    
+            // Loop through all rows, excluding the header
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                let isVisible = false;
+    
+                // Check each cell for the search query
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j] && cells[j].innerText.toLowerCase().includes(filter)) {
+                        isVisible = true;
+                        break;
+                    }
+                }
+    
+                // Show or hide the row based on search match
+                rows[i].style.display = isVisible ? "" : "none";
+            }
+        }
+    </script>
+    
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Attach click event for "Approve" buttons
+            document.querySelectorAll('.btn-approve').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const orderId = event.target.getAttribute('data-order-id');
+                    
+                    // Send request to update the status of the order in the orders table
+                    fetch('/approve_cancel_order', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ order_id: orderId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Order has been cancelled successfully!');
+                            location.reload(); // Reload the page to reflect the updated status
+                        } else {
+                            alert('Failed to cancel the order.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while processing the cancellation.');
+                    });
+                });
+            });
+    
+        });
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Show disapprove modal on button click
+            document.querySelectorAll('.btn-disapprove').forEach(button => {
+                button.addEventListener('click', function () {
+                    const orderId = this.getAttribute('data-order-id');
+                    // Set order ID in a hidden input or handle as needed
+                    document.getElementById('disapproveForm').setAttribute('data-order-id', orderId);
+                    $('#disapproveModal').modal('show');
+                });
+            });
+    
+            // Show the "Other" reason input field if "Other" is selected
+            const disapproveReasonSelect = document.getElementById('disapproveReason');
+            const otherReasonContainer = document.getElementById('otherReasonContainer');
+            disapproveReasonSelect.addEventListener('change', function () {
+                if (this.value === 'Other') {
+                    otherReasonContainer.style.display = 'block';
+                } else {
+                    otherReasonContainer.style.display = 'none';
+                    document.getElementById('otherReasonInput').value = ''; // Clear input
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Attach submit event for disapprove form
+            document.querySelector('#disapproveForm').addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent default form submission
+
+                // Get the order ID and disapprove reason
+                const orderId = event.target.getAttribute('data-order-id');
+                const disapproveReason = document.querySelector("select[name='disapprove_reason']").value;
+                const otherReason = document.querySelector("#otherReasonInput").value;
+
+                // If "Other" is selected, use the provided reason
+                const finalReason = disapproveReason === 'Other' ? otherReason : disapproveReason;
+
+                // Send request to update the status of the order
+                fetch('/disapprove_cancel_order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        disapprove_reason: finalReason
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Close the modal and show success message
+                        $('#disapproveModal').modal('hide');
+                        alert('Cancellation request has been disapproved.');
+                        location.reload(); // Reload the page to reflect the updated status
+                    } else {
+                        alert('Failed to disapprove the cancellation.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while processing the disapproval.');
+                });
+            });
+        });
+    </script>
+
+    
+
+</body>
+
+</html>

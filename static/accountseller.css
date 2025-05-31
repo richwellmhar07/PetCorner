@@ -1,0 +1,296 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+   
+}
+
+.mainnavbar {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    background-color: #efefe4;
+    top: 0px;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    height: 80px;
+    background-color: #2f2f30 !important;
+}
+
+.logo {
+    padding-top: 0px;
+}
+
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+input {
+    width: 50%;
+    height: 35px;
+    padding: 2px;
+}
+
+.custom-search input#search {
+    width: 500px !important;
+    border-radius: 10px;
+    border: solid 1px;
+    padding-left: 10px;
+    padding-right: 40px;
+}
+
+.input-group-text {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+#search-icon img {
+    width: 20px;
+    height: auto;
+    padding: 0;
+    filter: invert(50%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+#search-icon img:hover {
+    transform: scale(1.2);
+    filter: invert(100%);
+}
+
+.NavSubButtons {
+    flex: 1;
+    text-align: center;
+    background-color: #ffc107
+}
+
+.NavSubButtons ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 5px 0;
+    font-weight: 800;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.NavSubButtons ul li {
+    display: inline-block;
+    margin-right: 100px;
+}
+
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+}
+
+.NavSubButtons ul li a:hover {
+    color: #412ef0; ;
+    cursor: pointer;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #ffc107;
+}
+
+.navbar-nav .nav-link img {
+    width: 23px;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: invert(5%);
+}
+
+.navbar-nav .nav-link img:hover {
+    transform: scale(1.2);
+    filter: invert(0%);
+}
+/********************************************** Account Details *****************************************/
+
+.profile-header {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+    margin-bottom: 30px;
+}
+
+.username {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.email {
+    color: gray;
+}
+
+.profile-tabs .nav-link {
+    color: #007bff;
+}
+
+.profile-tabs .nav-link.active {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.profile {
+    padding-top: 150px;
+}
+
+@media (max-width: 768px) {
+    .navbar-brand img {
+        width: 150px;
+    }
+    nav ul {
+        text-align: left;
+        padding-top: 20px;
+    }
+    .input-group-prepend {
+        display: none;
+    }
+    .input-field {
+        width: 100%;
+    }
+}
+/********************************************* Update Button ***************************************************/
+
+.btn{
+    background-color: rgb(16, 111, 235);
+    border: 1px solid rgb(215, 216, 218);
+}
+
+/************** Notification Modal *************/
+
+.modal-content {
+    display: flex;
+    border-radius: 10px;
+    width: 420px; 
+    max-width: 500px; 
+    padding: 15px;
+    overflow: hidden;
+    margin-left: auto;
+    margin-top: 8vh;
+    height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-body {
+    max-height: 65vh;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.modal-header {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 10;
+}
+
+.modal-body.custom-body {
+    padding: 5px;
+    text-align: left;
+    max-height: 80vh;
+}
+
+/* Notification Item */
+.notification-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notification-item:hover {
+    background-color: #b8b8b8;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+/* Link styling */
+.notification-link,
+.notification-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.notification-item:hover .notification-link p,
+.notification-item a:hover {
+    color: #0a008f; 
+}
+
+.notification-item i {
+    color: #007bff;  
+}
+
+.notification-item i:hover {
+    color: #0056b3;  
+}
+
+.notification-link p {
+    margin-bottom: 5px;
+}
+
+.notification-link small {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* If no notifications, message style */
+.modal-body p {
+    font-size: 14px;
+    color: #2a9bff;
+    text-align: center;
+}
+
+/* Media Query to Adjust for Small Screens */
+@media (max-width: 576px) {
+    .modal-content {
+        width: 90%; 
+    }
+
+    .modal-header {
+        text-align: center;
+    }
+}

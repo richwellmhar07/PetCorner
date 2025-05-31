@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        function closeMessage(element) {
+            element.closest('.flash-messages').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    
+    <!-- Flash message block -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="{{ category }}">
+                   <p>{{ message }} <!--- <button class="flash-close" onclick="closeMessage(this)">✖ CLOSE</button> ---> </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="navbar">
+        <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Logo">
+        <div class="navbar-buttons">
+            <a style="display: none;" href="{{ url_for('sellerregistration') }}" class="btn signup-btn">Seller Registration</a>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        </div>
+    </div>
+    <br><br><br>
+
+    <div class="container">
+        <!-- Left Side (Image or Design Section) -->
+        <div class="left-section">
+            <img src="{{ url_for('static', filename='images/bgpc.png') }}" alt="Pet Corner" class="left-image">
+        </div>
+
+        <!-- Right Side (Login Form Section) -->
+        <div class="right-section">
+            <div class="login-box">
+                <h2>Log In</h2>
+                <p>Please login to your account.</p>
+                <form action="/login" method="POST">
+                    <div class="form-group">
+                        <input type="text" id="username" name="username" placeholder="Username or Email" required>
+                    </div>
+                    <div class="form-group" style="position: relative;">
+                        <input type="password" id="password" name="password" placeholder="Password" required style="width: 100%; padding-right: 40px;">
+                        <i class="fas fa-eye" id="togglePassword" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer; color: #555; display: none;"></i>
+                    </div>
+                    <div class="options">
+                        <a href="#" data-toggle="modal" data-target="#forgotPasswordModal">Forgot password?</a>
+                    </div>                    
+                    <button type="submit" class="login-btn" style="height: 40px;">LOG IN</button>
+                    <div class="register">
+                        <p>Don't have an account? <a href="{{ url_for('signup') }}">Create Account</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        function preback() {
+            window.history.forward();
+        }
+        setTimeout("preback()", 0);
+        window.onunload = function() { null };
+    </script>
+
+    <script>
+        // Show password toggle functionality
+        document.addEventListener("DOMContentLoaded", function () {
+        const passwordInput = document.getElementById("password");
+        const toggleIcon = document.getElementById("togglePassword");
+
+        // Show the eye icon only when there is input
+        passwordInput.addEventListener("input", function () {
+            if (passwordInput.value.length > 0) {
+                toggleIcon.style.display = "block";
+            } else {
+                toggleIcon.style.display = "none";
+                passwordInput.setAttribute("type", "password"); // Reset to hidden
+                toggleIcon.classList.add("fa-eye");
+                toggleIcon.classList.remove("fa-eye-slash");
+            }
+        });
+
+        // Toggle password visibility on icon click
+        toggleIcon.addEventListener("click", function () {
+            const isPassword = passwordInput.getAttribute("type") === "password";
+            passwordInput.setAttribute("type", isPassword ? "text" : "password");
+            toggleIcon.classList.toggle("fa-eye");
+            toggleIcon.classList.toggle("fa-eye-slash");
+        });
+    });
+    </script>
+
+    <script>
+        // Function to fade out the flash message after 5 seconds
+        document.addEventListener("DOMContentLoaded", function () {
+            const flashMessages = document.querySelectorAll('.flash-messages');
+            flashMessages.forEach(flashMessage => {
+                setTimeout(() => {
+                    flashMessage.style.opacity = '0'; // Start fading out
+                    setTimeout(() => {
+                        flashMessage.style.display = 'none'; // Hide after fade-out
+                    }, 1000); // Duration matches CSS transition time
+                }, 2000); // Delay seconds before fading out
+            });
+        });
+
+        function closeMessage(element) {
+            const flashMessage = element.closest('.flash-messages');
+            flashMessage.style.opacity = '0'; // Fade out when close button is clicked
+            setTimeout(() => {
+                flashMessage.style.display = 'none'; // Hide after fade-out
+            }, 1000); // Duration matches CSS transition time
+        }
+    </script>
+
+
+</body>
+</html>

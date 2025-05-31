@@ -1,0 +1,691 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+   
+}
+
+.mainnavbar {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    background-color: #efefe4;
+    top: 0px;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    height: 80px;
+    background-color: #2f2f30 !important;
+}
+
+.logo {
+    padding-top: 0px;
+}
+
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+input {
+    width: 50%;
+    height: 35px;
+    padding: 2px;
+}
+
+.custom-search input#search {
+    width: 500px !important;
+    border-radius: 10px;
+    border: solid 1px;
+    padding-left: 10px;
+    padding-right: 40px;
+}
+
+.input-group-text {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+#search-icon img {
+    width: 20px;
+    height: auto;
+    padding: 0;
+    filter: invert(50%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+#search-icon img:hover {
+    transform: scale(1.2);
+    filter: invert(100%);
+}
+
+.NavSubButtons {
+    flex: 1;
+    text-align: center;
+    background-color: #ffc107;
+}
+
+.NavSubButtons ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 5px 0;
+    font-weight: 800;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.NavSubButtons ul li {
+    display: inline-block;
+    margin-right: 100px;
+}
+
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+}
+
+.NavSubButtons ul li a:hover {
+    color: #412ef0;
+    cursor: pointer;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #ffc107;
+}
+
+.navbar-nav .nav-link img {
+    width: 23px;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: invert(5%);
+}
+
+.navbar-nav .nav-link img:hover {
+    transform: scale(1.2);
+    filter: invert(0%);
+}
+
+/************************* My Orders Style*************************/
+
+.orders-container {
+    width: 90%;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 20px auto;
+    margin-top: 150px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 25px;
+}
+
+/* Tabs Section */
+.order-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+   
+}
+button:focus {
+    outline: none;
+}
+
+.tab {
+    padding: 10px 15px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    flex: 1;
+    font-size: 16px;
+    margin: 0 5px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab.active {
+    background-color: #ffc107;
+    color: white;
+    border: none;
+    font-weight: bolder;
+}
+
+.tab-content {
+    display: none;  /*from block*/
+    flex-direction: row;
+    gap: 20px; 
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.order-card {
+    display: block;
+    width: 100%; 
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shop-info {
+    font-size: 13px;
+    padding-left: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* margin-bottom: 3px; */
+}
+
+.dates p{
+    margin-bottom: 0;
+}
+
+.shop-info h2 {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+}
+
+.shop-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.shop-actions button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.chat-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.chat-btn:hover {
+    background-color: #218838;
+}
+
+.view-shop-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.view-shop-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Order Status */
+.order-status {
+    text-align: right;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Order Items */
+.order-items {
+    padding-left: 30px;
+    display: inline-block;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.order-item {
+    display: flex; /* Use flexbox to align items horizontally */
+    align-items: center; /* Vertically center content */
+    margin-bottom: 0px; /* Add some spacing between order items */
+}
+
+.product-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 5px;
+    object-fit: cover;
+    margin-right: 15px; /* Add space between image and item details */
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensures the items take up the available vertical space */
+}
+
+.item-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.item-info .product-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.order-total {
+    text-align: right;
+    font-size: 20px;
+    color: #333;
+    margin-bottom: -5px;
+}
+
+.shipping-fee{
+    text-align: right;
+    font-size: 15px;
+    color: #007bff;
+    margin-bottom: 10px;
+
+}
+
+.order-total strong {
+    color: #007bff;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.action-buttons button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pay-now-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.pay-now-btn:hover {
+    background-color: #0056b3;
+}
+
+.cancel-order-btn {
+    height:40px;
+    padding: 0px 10px;
+    background-color: #d2000000;
+    color: #dc0000;
+    border-radius: 20px;
+    border: 2px solid #dc0000;
+    transition: background-color 0.4s;
+}
+
+.cancel-order-btn:hover {
+    color: white;
+    background-color: #dc0000;
+    border: 2px solid #dc0000;
+}
+
+.contact-seller-btn {
+    height: 40px;
+    padding: 0px 10px;
+    background-color: #ffc10700;
+    color: #ffc107;
+    border-radius: 20px;
+    border: 2px solid #ffc107;
+}
+
+.contact-seller-btn:hover {
+    color: white;
+    background-color: #ffc107;
+    border: 2px solid #ffc107;
+    transition: background-color 0.4s;
+}
+
+.rate-button {
+    color: #ffc107;
+    background-color: #ffffff;
+    border: 2px solid #ffc107;
+    height: 40px;
+    width: 140px;
+    border-radius: 20px;
+    margin-top: 15px;
+}
+
+.rate-button:hover {
+    color: white;
+    background-color: #ffc107;
+    border: none;
+    transition: background-color 0.4s;
+}
+
+.order-received-btn {
+    color: #ffc107;
+    background-color: #ffffff;
+    border: 2px solid #ffc107;
+    height: 40px;
+    width: 140px;
+    border-radius: 20px;
+}
+
+.order-received-btn:hover {
+    color: white;
+    background-color: #ffc107;
+    border: none;
+    transition: background-color 0.4s;
+}
+
+/* .btn-primary:disabled {
+    color: #ffffff;
+    background-color: #696969;
+    border-color: #696969;
+} */
+
+/************************ MODAL CSS ************************/
+
+/* Modal backdrop styling */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.7); /* Darker backdrop */
+}
+
+/* Modal backdrop styling */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.7); /* Darker backdrop */
+}
+
+/* Modal container styling */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Larger, softer shadow */
+    font-family: 'Quicksand', sans-serif;
+    overflow: hidden;
+    background: linear-gradient(145deg, #ffffff, #f1f1f1); /* Subtle gradient background */
+}
+
+/* Container for Proper Alignment */
+.input-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%; /* Ensure full width within the modal */
+    margin: 0 auto;
+    gap: 10px; /* Adds space between input and button */
+    margin-top: 20px; /* Adds space from other content */
+}
+
+/* Chat Input Styles */
+#chat-input {
+    border-radius: 15px 0 0 15px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    font-size: 1rem;
+    flex: 1;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+#chat-input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button Styles */
+.btn-primary {
+    height: 38px;
+    padding: 0px 10px;
+    background-color: #007bff;
+    color: #fff;
+    right: 10px;
+    border-radius: 20px;
+    border: 2px solid #007bff;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker shade */
+    border-color: #0056b3;
+}
+
+/* Modal header styling */
+.modal-header {
+    background-color: #007bff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+    justify-content: center;
+    color: white;
+}
+
+.modal-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+/* Close button styling */
+.btn-close {
+    outline: none;
+    color: #000000;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-close:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #000000;
+}
+
+/* Modal body styling */
+.modal-body {
+    padding: 2rem 1.5rem;
+    background-color: #fff;
+}
+
+/* Modal footer styling */
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Optional styling for the modal buttons */
+.btn-secondary,
+.btn-danger {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+    margin-left: 10px;
+}
+
+.btn-secondary:hover,
+.btn-danger:hover {
+    background-color: #218838;
+    transform: translateY(-2px); /* Subtle hover effect */
+}
+
+
+
+
+
+
+/******************** Style for feedback modal *********************/
+.stars i {
+    font-size: 24px;
+    color: #ffc107;
+    cursor: pointer;
+}
+.stars i.selected {
+    color: gold;
+}
+
+.rating-category {
+    margin-bottom: 15px;
+}
+
+.rating-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between items */
+}
+
+.rating-container h6 {
+    margin: 0;
+    flex-shrink: 0; /* Prevent text from shrinking */
+    width: 150px; /* Optional: Fix width for alignment */
+}
+
+.stars {
+    display: flex;
+    gap: 5px; /* Space between stars */
+}
+
+.rating-message {
+    margin-left: 10px; /* Space between stars and message */
+    color: #555; /* Optional: Add some subtle styling */
+    font-weight: bold;
+}
+/*********** alignment in completed **********/
+.onerow {
+    display: flex;              /* Use flexbox */
+    justify-content: space-between; /* Distribute space between left and right */
+    align-items: center;        /* Vertically center the content */
+    padding: 10px;              /* Optional padding around the container */
+}
+
+.rightside {
+    text-align: right;          /* Align the text of the right side to the right */
+}
+/*********** alignment in to ship **********/
+.order-actions {
+    display: flex;              /* Use flexbox */
+    justify-content: space-between; /* Distribute space between left and right */
+    align-items: center;        /* Vertically center the content */
+    padding: 10px;              /* Optional padding around the container */
+}
+.lastrow {
+    display: flex;              /* Use flexbox */
+    justify-content: space-between; /* Distribute space between left and right */
+    align-items: center;        /* Vertically center the content */
+    padding: 10px;              /* Optional padding around the container */
+}
+
+.priceright {
+    text-align: right;          /* Align the text of the right side to the right */
+}
+
+/******************************  style for modals **********8************/
+
+/* Chatbox Modal */
+
+#chatboxModal .modal-content {
+    background-color: #f9f9f9;
+    border: none;
+    border-radius: 7px;
+}
+
+#chatboxModal .modal-header {
+    background-color: #f9f9f9;
+    color: rgb(34, 34, 34);
+}
+
+#chatboxModal .btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+/* Cancel Order Modal */
+
+#cancelOrderModal .modal-content {
+    background-color: #fff5f5;
+    border: 2px solid #dc3545;
+    border-radius: 10px;
+}
+
+#cancelOrderModal .modal-header {
+    background-color: #dc3545;
+    color: white;
+}
+
+.form-check-input {
+    margin-right: 0px;
+    width: 16px;
+    height: 16px;
+}
+
+#cancelOrderModal .btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+/* Feedback Modal */
+
+#feedbackModal .modal-content {
+    background-color: #f0f8ff;
+    border: none;
+    border-radius: 7px;
+}
+
+#feedbackModal .modal-header {
+    background-color: #ffc107;
+    color: white;
+}
+

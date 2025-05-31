@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | My Shop</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='shop.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px"
+                alt="Pet Corner Logo">
+        </a>
+        <div class="navbar-collapse collapse show" id="navbarNav">
+            <!-- Search Bar -->
+            <form class="form-inline my-2 my-lg-0 mx-auto custom-search">
+                <div class="input-group">
+                    <input class="form-control" type="search" id="search" name="search" placeholder="Search here..">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="search-icon">
+                            <img src="{{ url_for('static', filename='images/search.svg') }}" width="25px"
+                                alt="Search Icon">
+                        </span>
+                    </div>
+                </div>
+            </form>
+            <!-- Nav Icons -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#"><img
+                    src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                    alt="Account"></a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><img
+                    src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                    alt="Account"></a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><img
+                            src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px"
+                            alt="Account"></a></li>
+
+                 <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout')}}" onclick="confirmLogout();">
+                            <img src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="23px" alt="logout">
+                        </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#" title="message" onclick="showMessageModal()">
+                        <img src="{{ url_for('static', filename='images/messages.png') }}" width="23px" alt="message">
+                    </a>
+                </li> 
+                <!-- <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}" onclick="confirmLogout();"><img
+                            src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="23px"
+                            alt="logout"></a></li> -->
+
+                 <!-- <li class="nav-item">
+                        <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
+                            <button type="submit" class="nav-link" style="background: none; border: none; padding: 0;">
+                                <img src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="23px" alt="logout">
+                             </button>
+                        </form>
+                 </li> -->
+                            
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Nav Sub Buttons -->
+    <div class="NavSubButtons">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('seller')}}">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">My Shop</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Temporary</a></li>
+        </ul>
+    </div>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Products Table -->
+    <div class="container mt-5">
+
+        <!-- Add Product Button (this is the button that was missing) -->
+        <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addProductModal">
+            Add New Product
+        </button>
+
+        <h2 class="mb-4">Product List</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stocks</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product  in products %}
+                <tr>
+                    <td>{{ product.productid }}</td>
+                    <td>{{ product.productname }}</td>
+                    <td>{{ product.productdescription }}</td>
+                    <td>{{ product.productcategory }}</td>
+                    <td>${{ product.productprice }}</td>
+                    <td>{{ product.productstocks }}</td>
+                    <td><img src="{{ url_for('static', filename='images/' + product.productimage) }}" width="100" alt="{{ product.productname }}"></td>
+                    <td>
+                        <!-- Update Button (triggers modal) -->
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateProductModal{{ product.productid }}">
+                            <img src="{{ url_for('static', filename='images/pen-solid.svg') }}" width="20px" alt=""></button>
+
+                        <!-- Delete Button -->
+                        <form action="{{ url_for('delete_products', productid=product.productid) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+                            <button type="submit" class="btn btn-danger btn-sm"><img src="{{ url_for('static', filename='images/trash-solid.svg')}}" width="18px" alt="delete"></button>
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                <!-- Update Product Modal -->
+                <div class="modal fade" id="updateProductModal{{ product.productid }}" tabindex="-1" aria-labelledby="updateProductModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="{{ url_for('update_products', productid=product.productid) }}" method="POST" enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="productname">Product Name</label>
+                                        <input type="text" class="form-control" id="productname" name="productname" value="{{ product.productname }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productdescription">Product Description</label>
+                                        <textarea class="form-control" id="productdescription" name="productdescription" rows="3" required>{{ product.productdescription }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productcategory">Category</label>
+                                        <select class="form-control" id="productcategory" name="productcategory" required>
+                                            <option value="Dog" {% if product.productcategory == 'Dog' %} selected {% endif %}>Dog</option>
+                                            <option value="Cat" {% if product.productcategory == 'Cat' %} selected {% endif %}>Cat</option>
+                                            <option value="Fish" {% if product.productcategory == 'Fish' %} selected {% endif %}>Fish</option>
+                                            <option value="Bird" {% if product.productcategory == 'Bird' %} selected {% endif %}>Bird</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productprice">Price</label>
+                                        <input type="number" class="form-control" id="productprice" name="productprice" step="0.01" value="{{ product.productprice }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productstocks">Stocks</label>
+                                        <input type="number" class="form-control" id="productstocks" name="productstocks" value="{{ product.productstocks }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productimage">Product Image</label>
+                                        <input type="file" class="form-control-file" id="productimage" name="productimage">
+                                        <small>Leave blank to keep current image.</small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success">Update Product</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addProductForm" action="{{ url_for('add_products') }}" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="productname">Product Name</label>
+                            <input type="text" class="form-control" id="productname" name="productname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productdescription">Product Description</label>
+                            <textarea class="form-control" id="productdescription" name="productdescription" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productcategory">Category</label>
+                            <select class="form-control" id="productcategory" name="productcategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Dog">Dog</option>
+                                <option value="Cat">Cat</option>
+                                <option value="Fish">Fish</option>
+                                <option value="Bird">Bird</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productprice">Price</label>
+                            <input type="number" class="form-control" id="productprice" name="productprice" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productstocks">Stocks</label>
+                            <input type="number" class="form-control" id="productstocks" name="productstocks" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productimage">Product Image</label>
+                            <input type="file" class="form-control-file" id="productimage" name="productimage" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this product?");
+        }
+        // function confirmLogout() {
+        //     if (confirm("Are you sure you want to log out?")) {
+        //         window.location.href = "{{ url_for('login') }}"; // Redirect to the logout route
+        //     }
+        // }
+        function confirmLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                // If the user confirms, redirect to the logout URL
+                 window.location.href = "{{ url_for('logout') }}";
+            }
+       }
+    
+
+        
+    </script>
+    
+
+</body>
+
+</html>

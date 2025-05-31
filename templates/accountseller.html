@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Account</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='accountseller.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="mainnavbar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" id="Homepage">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('seller') }}" title="home"><img
+                        src="{{ url_for('static', filename='images/house-solid.svg') }}" width="23px"
+                        alt="Account"></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#" title="notification"><img
+                        src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                        alt="Account"></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('accountseller') }}" title="account"><img
+                        src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px"
+                        alt="Account"></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout"
+                        onclick="confirmLogout(event);"><img
+                        src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="24px"
+                        alt="logout"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Nav Sub Buttons -->
+        <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('seller') }}" id="homebtn">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('orders') }}" id="ordersbtn">Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('requests') }}" id="requestsbtn">Requests</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-------------------- Modal for Notification ------------------->
+    
+    <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <div class="notification-item mb-3">
+                                <a href="{{ notification['link'] }}" class="notification-link">
+                                    <p><strong>{{ notification['message'] }}</strong></p>
+                                    <small class="text-muted">{{ notification['created_at'] }}</small>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No new notifications.</p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accountdetails">
+        <div class="container mt-5">
+            <div class="profile">
+                <div class="profile-header text-center">
+                    <div class="profile-image">
+                        <img id="profile-pic" 
+                             src="{{ 'data:image/jpeg;base64,' + profile_image if profile_image else url_for('static', filename='images/noprof.png') }}" 
+                             alt="Profile Picture" class="rounded-circle" width="150" height="150">
+                        <input type="file" id="profile-pic-upload" accept="image/*" style="display: none;" onchange="uploadProfilePic()">
+                        <h2 class="username">{{ seller_info[1] }}</h2> <!-- Shop Name -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-tabs mt-4">
+                <ul class="nav nav-pills justify-content-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#addresses">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#settings">Seller</a>
+                    </li>
+                </ul>
+            </div>
+    
+            <div class="tab-content mt-4">
+                <div id="addresses" class="tab-pane fade show active">
+                    <h4>Shop Name</h4>
+                    <div class="border p-3 mb-3">
+                        <p>{{ seller_info[1] }}</p> <!-- Shop Name -->
+                    </div>
+    
+                    <h4>Shop Address</h4>
+                    <div class="border p-3 mb-3">
+                        <p>{{ seller_info[11] }}</p> <!-- Address -->
+                    </div>
+                </div>
+    
+                <div id="settings" class="tab-pane fade">
+                    <h4>Account</h4>
+                    <form id="settings-form" method="POST">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="userid" value="{{ seller_info[0] }}" style="display: none;" readonly>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" value="{{ seller_info[2] }} {{ seller_info[3] }} {{ seller_info[4] }}" readonly>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" value="{{ seller_info[5] }}" readonly>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" value="{{ seller_info[6] }}" readonly>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" value="{{ seller_info[7] }}" readonly>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="phonenumber">Phone Number</label>
+                            <input type="text" class="form-control" id="phonenumber" value="{{ seller_info[8] }}" readonly>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="birthday">Birthday</label>
+                            <input type="date" class="form-control" id="birthday" value="{{ seller_info[9] }}" readonly>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <input type="text" class="form-control" id="gender" value="{{ seller_info[10] }}" readonly>
+                        </div>
+    
+                        <button class="btn btn-success" type="button" id="saveProfileBtn">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+        function confirmLogout(event) {
+            event.preventDefault();  
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = "{{ url_for('logout') }}"; 
+            }
+        }
+
+        // Enable editing for each field when the respective update button is clicked
+        document.querySelectorAll('.input-group-append button').forEach(button => {
+            button.addEventListener('click', function() {
+                const inputField = this.parentElement.previousElementSibling;
+                inputField.removeAttribute('readonly');
+                inputField.focus();
+            });
+        });
+
+        // Function to handle profile picture upload
+        function uploadProfilePic() {
+            const fileInput = document.getElementById('profile-pic-upload');
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profile-pic').src = e.target.result;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+                // Implement the AJAX call or form submission here to save the profile picture in the database
+            }
+        }
+    </script>
+
+    <script>  // for notification
+        document.querySelector("[title='notification']").addEventListener("click", function(event) {
+            event.preventDefault();
+            $('#notificationModal').modal('show');
+        });
+    </script>
+
+    <script> // for notification
+
+        function checkForNewApplications() {
+            fetch('/accountseller')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.newApplications) {
+                        // Display notification modal
+                        document.getElementById('notificationModal').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error checking new applications:', error));
+        }
+
+        // Poll the server every 10 seconds
+        setInterval(checkForNewApplications, 10000);
+
+    </script>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,140 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+   
+}
+
+.mainnavbar {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    background-color: #efefe4;
+    top: 0px;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    height: 80px;
+    background-color: #2f2f30 !important;
+}
+
+.logo {
+    padding-top: 0px;
+}
+
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+input {
+    width: 50%;
+    height: 35px;
+    padding: 2px;
+}
+
+.custom-search input#search {
+    width: 500px !important;
+    border-radius: 10px;
+    border: solid 1px;
+    padding-left: 10px;
+    padding-right: 40px;
+}
+
+.input-group-text {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+#search-icon img {
+    width: 20px;
+    height: auto;
+    padding: 0;
+    filter: invert(50%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+#search-icon img:hover {
+    transform: scale(1.2);
+    filter: invert(100%);
+}
+
+.NavSubButtons {
+    flex: 1;
+    text-align: center;
+    background-color: #ffc107;
+}
+
+.NavSubButtons ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 5px 0;
+    font-weight: 800;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.NavSubButtons ul li {
+    display: inline-block;
+    margin-right: 100px;
+}
+
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+}
+
+.NavSubButtons ul li a:hover {
+    color: #412ef0;
+    cursor: pointer;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #ffc107;
+}
+
+.navbar-nav .nav-link img {
+    width: 23px;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: invert(5%);
+}
+
+.navbar-nav .nav-link img:hover {
+    transform: scale(1.2);
+    filter: invert(0%);
+}

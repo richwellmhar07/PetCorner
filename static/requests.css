@@ -1,0 +1,414 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+   
+}
+
+.mainnavbar {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    background-color: #efefe4;
+    top: 0px;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    height: 80px;
+    background-color: #2f2f30 !important;
+}
+
+.logo {
+    padding-top: 0px;
+}
+
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+input {
+    width: 50%;
+    height: 35px;
+    padding: 2px;
+}
+
+.custom-search input#search {
+    width: 500px !important;
+    border-radius: 10px;
+    border: solid 1px;
+    padding-left: 10px;
+    padding-right: 40px;
+}
+
+.input-group-text {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+#search-icon img {
+    width: 20px;
+    height: auto;
+    padding: 0;
+    filter: invert(50%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+#search-icon img:hover {
+    transform: scale(1.2);
+    filter: invert(100%);
+}
+
+.NavSubButtons {
+    flex: 1;
+    text-align: center;
+    background-color: #ffc107;
+}
+
+.NavSubButtons ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 5px 0;
+    font-weight: 800;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.NavSubButtons ul li {
+    display: inline-block;
+    margin-right: 100px;
+}
+
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+}
+
+.NavSubButtons ul li a:hover {
+    color: #412ef0;
+    cursor: pointer;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.table .thead-light th {
+    color: #ffffff;
+    background-color: #2f2f30;
+    border-color: #dee2e6;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #ffc107;
+}
+
+.navbar-nav .nav-link img {
+    width: 23px;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: invert(5%);
+}
+
+.navbar-nav .nav-link img:hover {
+    transform: scale(1.2);
+    filter: invert(0%);
+}
+
+/***************************** Cancel order table *********************************/
+
+.cancelordertable{
+    margin-top: 200px;
+}
+
+.cancelordertable .container {
+    max-width: 90%; /* Adjust the percentage as needed */
+    margin: auto; /* Center the table */
+}
+
+.cancelordertable .table {
+    font-size: 0.9rem; /* Adjust font size for smaller text */
+    width: 100%;
+}
+
+.cancelordertable th, .cancelordertable td {
+    padding: 0.5rem; /* Adjust padding for smaller cells */
+    text-align: center; /* Optional: center-align text */
+}
+
+ /* Adjust width and height */
+.status-dropdown {
+    width: 120px; 
+    height: 35px; 
+    font-size: 0.9rem; 
+}
+
+/***************************** Approve Button *********************************/
+.btn-success {
+    color: #ffc107;
+    background-color: #ffffff;
+    font-weight: bolder;
+    border: 2px solid #ffc107;
+    border-radius: 20px;
+    width: 120px;
+}
+
+.btn-success:hover {
+    background-color: #ffc107;
+    color: #ffffff;
+    border: 2px solid #ffc107;
+}
+
+/***************************** Disapprove Button *********************************/
+.btn-danger {
+    color: #dc3545;
+    background-color: #ffffff;
+    font-weight: bolder;
+    border: 2px solid #dc3545;
+    border-radius: 20px;
+    width: 120px;
+}
+
+.btn-danger:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: 2px solid #dc3545;
+}
+
+/***************************** Disapprove Modal *********************************/
+
+/* General styles for the disapproval modal */
+.disapprove-modal-content {
+    background-color: #f8f9fa; /* Light gray background for a clean look */
+    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #dee2e6; /* Subtle border for separation */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+/* Modal header styling */
+.disapprove-modal-content .modal-header {
+    background-color: #dc3545; /* Red color to emphasize disapproval */
+    color: #ffffff; /* White text for contrast */
+    border-bottom: 1px solid #c82333;
+    padding: 15px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Modal title styling */
+.disapprove-modal-content .modal-title {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+/* Close button in the modal header */
+.disapprove-modal-content .close {
+    color: #ffffff;
+    opacity: 0.8;
+}
+.disapprove-modal-content .close:hover {
+    opacity: 1;
+    color: #f8d7da;
+}
+
+/* Modal body styling */
+.disapprove-modal-content .modal-body {
+    padding: 20px;
+    font-size: 1rem;
+    color: #212529;
+}
+
+/* Increase the size of radio buttons */
+.disapprove-modal-content .form-check-input {
+    transform: scale(0.5); /* Scale up by 1.5 times */
+    accent-color: #dc3545; /* Set a custom accent color */
+}
+
+/* Ensure the radio button is vertically aligned with the label */
+.disapprove-modal-content .form-check-label {
+    vertical-align: middle;
+    font-size: 1rem; /* Adjust label font size to match the larger button */
+}
+
+.disapprove-modal-content .form-check-label {
+    font-size: 1rem;
+    color: #495057;
+}
+
+/* "Other" reason container styling */
+#otherReasonContainer {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+
+/* Input field for "Other" reason */
+#otherReasonInput {
+    margin-top: 8px;
+    font-size: 0.95rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    padding: 8px;
+    color: #495057;
+}
+
+/* Modal footer styling */
+.disapprove-modal-content .modal-footer {
+    background-color: #f1f1f1;
+    border-top: 1px solid #dee2e6;
+    padding: 15px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Buttons in the modal footer */
+.disapprove-modal-content .modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    color: #ffffff;
+}
+.disapprove-modal-content .modal-footer .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.disapprove-modal-content .modal-footer .btn-danger {
+    background-color: #dc3545;
+    border: none;
+    color: #ffffff;
+}
+.disapprove-modal-content .modal-footer .btn-danger:hover {
+    background-color: #c82333;
+}
+/************** Notification Modal *************/
+
+.modal-content {
+    display: flex;
+    border-radius: 10px;
+    width: 420px; 
+    max-width: 500px; 
+    padding: 15px;
+    overflow: hidden;
+    margin-left: auto;
+    margin-top: 8vh;
+    height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-body {
+    max-height: 65vh;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.modal-header {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 10;
+}
+
+.modal-body.custom-body {
+    padding: 5px;
+    text-align: left;
+    max-height: 80vh;
+}
+
+/* Notification Item */
+.notification-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notification-item:hover {
+    background-color: #b8b8b8;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+/* Link styling */
+.notification-link,
+.notification-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.notification-item:hover .notification-link p,
+.notification-item a:hover {
+    color: #0a008f; 
+}
+
+.notification-item i {
+    color: #007bff;  
+}
+
+.notification-item i:hover {
+    color: #0056b3;  
+}
+
+.notification-link p {
+    margin-bottom: 5px;
+}
+
+.notification-link small {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* If no notifications, message style */
+.modal-body p {
+    font-size: 14px;
+    color: #2a9bff;
+    text-align: center;
+}
+
+/* Media Query to Adjust for Small Screens */
+@media (max-width: 576px) {
+    .modal-content {
+        width: 90%; 
+    }
+
+    .modal-header {
+        text-align: center;
+    }
+}
+/************** Disapproval modal *************/
+
+#disapproveModal .modal-header{
+    background-color: #007bff;
+}
+

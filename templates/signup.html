@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Sign up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        function toggleSubmitButton(checkbox) {
+            document.getElementById('submitBtn').disabled = !checkbox.checked;
+        }
+
+        function closeMessage(element) {
+            element.closest('.flash-messages').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Flash message block -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="{{ category }}">
+                    <p>{{ message }} <button onclick="closeMessage(this)">✖</button></p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="navbar">
+        <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Logo">
+        <div class="navbar-buttons">
+            <!-- <a href="#" class="btn signup-btn">SIGN UP</a> -->
+            <a href="{{ url_for('login') }}" class="btn login-btn">LOG IN</a>
+    </div>
+    </div><br><br><br>
+
+    <br><br>
+    <div class="form">
+        <h2>Sign Up</h2>
+        <form id="signupForm" action="javascript:void(0);" method="POST">
+            <!-- Username Field -->
+            <div class="form-group">
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <!-- Password Fields -->
+            <div class="form-group">
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="confirmpass" name="confirmpassword" placeholder="Confirm Password" required>
+            </div>
+            <!-- User Type -->
+            <div class="usertype">
+                <label>
+                    <input type="radio" id="seller" name="user" value="seller" required>
+                    Seller
+                </label>
+                <label>
+                    <input type="radio" id="buyer" name="user" value="buyer" required>
+                    Buyer
+                </label>
+            </div>
+            <!-- Terms and Conditions -->
+            <div class="terms">
+                <label>
+                    <input type="checkbox" name="terms" required onchange="toggleSubmitButton(this)">
+                    I agree with the <a href="#" style="text-decoration: none;">terms and conditions</a>
+                </label>
+            </div>
+            <!-- Submit Button -->
+            <input type="submit" id="submitBtn" value="Submit" disabled>
+        </form>
+    </div>
+    
+    
+
+
+    <!-- Modal for Create Account -->
+
+    <div id="createAccountModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Create Account</h2>
+            
+            <!-- Form to submit email for verification -->
+            <form id="createAccountForm" onsubmit="return false;"> <!-- Prevent form submission -->
+                <div class="form-group">
+                    <label for="email">Enter your email</label>
+                    <input type="email" id="email" name="email" placeholder="Email Address" required>
+                </div>
+                <button type="button" onclick="sendVerificationCode()">Submit</button>  <!-- Changed button to type button -->
+            </form><br><br>
+
+            <form action="{{ url_for('verify_code') }}" method="POST">
+                <div class="form-group">
+                    <label for="verificationCode">Enter the verification code sent to your email:</label>
+                    <input type="text" id="verificationCode" name="verificationCode" placeholder="Verification Code">
+                </div>
+                <button type="submit">Verify</button>
+            </form>
+        </div>
+    </div>
+
+    <!------------------------------------------------------------------------------------------->
+
+
+    <script>
+
+        document.getElementById('signupForm').onsubmit = function(event) {
+            // Prevent default form submission
+            event.preventDefault();
+            
+            // Open the modal for email verification
+            openModal();
+        };
+    
+        // Function to open the modal
+        function openModal() {
+            document.getElementById('createAccountModal').style.display = 'block';
+        }
+    
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('createAccountModal').style.display = 'none';
+        }
+    
+        // Function to send verification code
+        function sendVerificationCode() {
+            const emailInput = document.getElementById('email').value; // Make sure this matches your input ID
+            const submitButton = document.querySelector('#createAccountForm button'); // Select the button
+            
+            // Perform validation
+            if (!emailInput) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+    
+            // Disable the button to prevent multiple submissions
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Sending...'; // Change button text to indicate processing
+    
+            // Send an AJAX request to check if email exists
+            fetch('/check_email_existence', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'email': emailInput
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    alert('Email already exists! Please use a different email or log in.');
+                    submitButton.disabled = false; // Re-enable the button
+                    submitButton.innerHTML = 'Submit'; // Reset button text
+                } else {
+                    // Email is unique, store user info and send the verification code
+                    const userInfo = {
+                        username: document.getElementById('username').value,
+                        password: document.getElementById('password').value,
+                        user_type: document.querySelector('input[name="user"]:checked').value,
+                        email: emailInput
+                    };
+    
+                    // Store user info in session using fetch
+                    fetch('/set_user_info', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(userInfo)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return fetch('/send_verification_code', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: new URLSearchParams({
+                                    'email': emailInput
+                                })
+                            });
+                        } else {
+                            throw new Error('Failed to save user information.');
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Verification code sent! Please check your email.');
+                        } else {
+                            alert('Failed to send verification code. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while sending the verification code.');
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while checking email.');
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Submit'; // Reset button text
+            });
+        }
+    
+        // Function to verify the entered code
+        function verifyCode() {
+            const code = document.getElementById('verificationCode').value;
+    
+            fetch('/verify_code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'verificationCode': code
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Email verified successfully!");
+                    closeModal();
+                    // After closing the modal, you can insert the user data into the database
+                    insertUserData();
+                } else {
+                    alert("Invalid verification code. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while verifying the code.');
+            });
+        }
+    
+        // Function to insert user data into the database
+        function insertUserData() {
+            const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+    
+            fetch('/insert_user_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userInfo)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("User information saved successfully!");
+                    // Optionally redirect to another page or show success message
+                } else {
+                    alert("Failed to save user information. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving user information.');
+            });
+        }
+    
+        // To trigger modal from "Create Account" button
+        document.querySelector('.register a').addEventListener('click', function(event) {
+            event.preventDefault();
+            openModal();
+        });
+        
+    </script>
+    
+
+
+</body>
+</html>

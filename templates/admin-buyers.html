@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Admin - Buyers</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin-buyers.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="mainnavbar">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- <li class="nav-item"><a class="nav-link" href="#" title="home"><img
+                        src="{{ url_for('static', filename='images/house-solid.svg') }}" width="23px"
+                        alt="Account"></a>
+                    </li> -->
+                    <li class="nav-item"><a class="nav-link" href="#" id="notification-icon" title="notification"><img
+                        src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                        alt="Notification Icon"></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('accountseller') }}" title="account"><img
+                        src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px"
+                        alt="Account"></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout" onclick="confirmLogout(event);"><img
+                        src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="24px"
+                        alt="logout"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+         <!-- Nav Sub Buttons -->
+         <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item"><a class="nav-link" href="{{url_for('sales')}}">Sales Report</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('admin')}}">Sellers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('display_buyer_info')}}" style="color: blue;">Buyers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('display_product_info')}}">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('new_seller')}}">Seller Application</a></li>
+
+            </ul>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button> -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% for notification in notifications %}
+                        <div class="notification-item">
+                            <a href="{{ notification.link }}" class="notification-link">{{ notification.message }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
+
+    <div class="row1">
+
+
+    </div>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+
+
+    <!-- Products Table -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Buyer's Information Table</h2>
+
+        <!-- Container Div for Add Product Button and Search Bar -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <!-- Search Bar -->
+            <form class="form-inline my-2 my-lg-0 custom-search">
+                <div class="input-group">
+                    <input class="form-control" type="search" id="search" name="search" placeholder="Search here..">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="search-icon">
+                            <img src="{{ url_for('static', filename='images/search.svg') }}" width="25px"
+                                alt="Search Icon">
+                        </span>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Username</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                {% for buyer in buyers %}
+                <tr>
+                    <td>{{ buyer[0] }}</td>
+                    <td>{{ buyer[1] }}</td> 
+                    <td>{{ buyer[2] }}</td> 
+                    <td>{{ buyer[3] }}</td> 
+                    <td>{{ buyer[4] }}</td> 
+                    <td>{{ buyer[5] }}</td> 
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+     <!-- Notification Modal -->
+     <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% for notification in notifications %}
+                        <div class="notification-item">
+                            <a href="{{ notification.link }}" class="notification-link">{{ notification.message }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        }
+
+    </script>
+
+    <script> //code for search field
+
+        function filterProducts() {
+            const searchInput = document.getElementById("search").value.toLowerCase();
+            const productTableBody = document.getElementById("productTableBody");
+            const rows = Array.from(productTableBody.getElementsByTagName("tr"));
+
+            // Clear any previous matches to start fresh
+            rows.forEach(row => row.style.display = "");
+
+            // If search input is empty, show all rows
+            if (searchInput === "") {
+                rows.forEach(row => productTableBody.appendChild(row));
+                return;
+            }
+
+            // Filter rows based on the search term
+            const matchingRows = rows.filter(row => {
+                const cells = row.getElementsByTagName("td");
+                return Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchInput));
+            });
+
+            // Hide all rows and only show the matching ones
+            rows.forEach(row => row.style.display = "none");
+            matchingRows.forEach(row => row.style.display = "");
+
+            // Append matching rows to the top of the table
+            matchingRows.forEach(row => productTableBody.insertBefore(row, productTableBody.firstChild));
+        }
+
+        // Attach the filterProducts function to the search input's keyup event
+        document.getElementById("search").addEventListener("keyup", filterProducts);
+
+    </script>
+
+    <script>   // Open modal when the notification icon is clicked
+        
+        document.getElementById('notification-icon').addEventListener('click', function (event) {
+            event.preventDefault();
+            $('#notificationModal').modal('show');
+        });
+
+    </script>
+
+    <script> // display notification
+        function checkForNewApplications() {
+            fetch('/get_new_applications')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.newApplications) {
+                        // Display notification modal
+                        document.getElementById('notificationModal').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error checking new applications:', error));
+        }
+
+        // Poll the server every 10 seconds
+        setInterval(checkForNewApplications, 10000);
+    </script>
+
+
+   
+</body>
+
+</html>

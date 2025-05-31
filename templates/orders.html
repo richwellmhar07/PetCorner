@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Seller - Orders</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='orders.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="mainnavbar">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px"
+                    alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('seller') }}" title="home"><img
+                        src="{{ url_for('static', filename='images/house-solid.svg') }}" width="23px"
+                        alt="Account"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" title="notification"><img
+                                src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                                alt="Account"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('accountseller') }}" title="account"><img
+                                src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px"
+                                alt="Account"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout"
+                            onclick="confirmLogout(event);"><img
+                                src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="24px"
+                                alt="logout"></a></li>
+
+                </ul>
+            </div>
+        </nav>
+        <!-- Nav Sub Buttons -->
+        <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('seller') }}" id="homebtn">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('orders') }}" id="ordersbtn" style="color: blue;">Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('requests') }}" id="requestsbtn">Requests</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('sellersales') }}" id="sellersalesbtn">Sales Report</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-------------------- Modal for Notification ------------------->
+    
+    <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <div class="notification-item mb-3">
+                                <a href="{{ notification['link'] }}" class="notification-link">
+                                    <p><strong>{{ notification['message'] }}</strong></p>
+                                    <small class="text-muted">{{ notification['created_at'] }}</small>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No new notifications.</p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--------------------Order Table-------------------->
+
+
+    <div class="orderstable">
+        <div class="container mt-5">
+            <h4 class="text-center mb-4">New Orders</h4>
+    
+            <!-- Search Field -->
+            <form class="form-inline my-2 my-lg-0 custom-search">
+                <div class="input-group">
+                    <input
+                        class="form-control"
+                        type="search"
+                        id="search"
+                        name="search"
+                        placeholder="Search here.."
+                        style="margin-bottom: 30px;"
+                        onkeyup="searchTable()"
+                    >
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="search-icon">
+                            <img
+                                src="{{ url_for('static', filename='images/search.svg') }}"
+                                width="25px"
+                                alt="Search Icon"
+                                style="display: none;"
+                            >
+                        </span>
+                    </div>
+                </div>
+            </form>
+    
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="ordersTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>OID</th>
+                            <th style="display: none;">User ID</th>
+                            <th>Buyer</th>
+                            <th style="display: none;">Product ID</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Qty.</th>
+                            <th>Subtotal</th>
+                            <th>Ordered Date</th>
+                            <th>Shipped Date</th>
+                            <th>Received Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{ order.order_id }}</td>
+                            <td style="display: none;">{{ order.user_id }}</td>
+                            <td>{{ order.buyer_name }}</td>
+                            <td style="display: none;">{{ order.productid }}</td>
+                            <td>{{ order.productname }}</td>
+                            <td>₱{{ order.productprice }}</td>
+                            <td>{{ order.productqty }}</td>
+                            <td>₱{{ order.subtotal }}</td>
+                            <td>{{ order.ordered_date }}</td>
+                            <td>{{ order.shipped_date or 'Pending' }}</td>
+                            <td>{{ order.received_date or 'Not Received' }}</td>
+
+                            <td>
+                                {% if order.received_date %}
+                                    <input type="text" class="form-control" value="Received" readonly style="width: 165px;">
+                              
+                                {% else %}
+                                
+                                    <select class="form-control status-dropdown" data-order-id="{{ order.order_id }}"
+                                        {% if order.status == 'Ready for pick up' %}disabled{% endif %}>
+                                        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                        <option value="Ready for pick up" {% if order.status == 'Ready for pick up' %}selected{% endif %}>Ready for pick up</option>
+                                    </select>
+                                {% endif %}
+                            </td>
+                            
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function confirmLogout() {
+        if (confirm("Are you sure you want to log out?")) {
+            window.location.href = "{{ url_for('login') }}";
+        }
+    }
+    </script>
+
+    <!-- Search product JS -->
+    <script>
+        function searchTable() {
+            const input = document.getElementById("search");
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById("ordersTable");
+            const rows = table.getElementsByTagName("tr");
+    
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                let isVisible = false;
+    
+                // Check each visible cell in the row for the search query
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].style.display !== "none" && cells[j].innerText.toLowerCase().includes(filter)) {
+                        isVisible = true;
+                        break;
+                    }
+                }
+    
+                // Toggle the row visibility
+                rows[i].style.display = isVisible ? "" : "none";
+            }
+        }
+    </script>
+ 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdowns = document.querySelectorAll('.status-dropdown');
+    
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('change', function () {
+                    const orderId = this.dataset.orderId;
+                    const newStatus = this.value;
+    
+                    fetch(`/update_order_status`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ order_id: orderId, status: newStatus })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Status updated successfully!');
+    
+                            if (newStatus === 'Ready for pick up') {
+                                this.disabled = true;
+                            }
+    
+                        } else {
+                            alert('Failed to update status.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+    </script>
+    
+    
+
+    <script>  // for notification
+        document.querySelector("[title='notification']").addEventListener("click", function(event) {
+            event.preventDefault();
+            $('#notificationModal').modal('show');
+        });
+    </script>
+
+    <script> // for notification
+
+        function checkForNewApplications() {
+            fetch('/seller')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.newApplications) {
+                        // Display notification modal
+                        document.getElementById('notificationModal').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error checking new applications:', error));
+        }
+
+        // Poll the server every 10 seconds
+        setInterval(checkForNewApplications, 10000);
+
+    </script>
+    
+    
+
+</body>
+
+</html>

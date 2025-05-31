@@ -1,0 +1,172 @@
+body {
+    font-family: 'Quicksand', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items to the top */
+    background-color: #009fcb; /* Light background color for contrast */
+}
+
+/* General Navbar Styles */
+.navbar {
+    background-color: #30302f; /* Dark background for the navbar */
+    height: 80px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure navbar stays on top */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Styling the Container within Navbar */
+.navbar .container {
+    max-width: 1200px;
+    margin: 0 auto; /* Center the content inside the navbar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Navbar Brand Styles */
+.navbar-brand img {
+    max-width: 100%; 
+    height: auto; 
+    width: 270px; /* Adjust logo size */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .navbar {
+        height: auto; /* Adjust height for smaller screens */
+        padding: 10px;
+    }
+
+    .navbar-brand img {
+        width: 250px; /* Scale down logo on smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar-brand img {
+        width: 200px;
+        margin-bottom: 10px; /* Add space between logo and other elements */
+    }
+}
+
+/*********************************** For flash message ******************************/
+.success {
+    color: #ff0000;
+    background-color: #5a5b5a;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    text-align: center;
+    opacity: 0.5;
+}
+
+.danger {
+    color: #ffff;
+    background-color: #5a5b5a;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    text-align: center;
+    opacity: 0.5;
+}
+
+.flash-messages {
+    position: relative;
+    z-index: 999; 
+    top: 10px; 
+    text-align: center;
+    color: #4d4f4d;
+}
+
+.flash-messages button {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: #fdfcfc;
+}
+
+/******************************************** Registration Form ************************************************/
+.regform {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 1200px;
+    background-color: #fad500;
+    border-radius: 20px;
+    padding: 5px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 100px; /* Adjust this value if needed */
+    font-family: 'Century Gothic', sans-serif;
+    font-weight: bold;
+}
+
+.regform h2 {
+    font-weight: bolder;
+}
+
+.form-container {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.image-container {
+    flex: 0 0 40%; /* Fixed width for image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#cancelBtn {
+    font-weight: bold;
+    margin-right: auto;
+    background-color: red;
+    border: none;
+}
+
+#registerBtn {
+    font-weight: bold;
+    margin-left: auto; /* Ensure the Register button stays on the right */
+    background-color: blue;
+    border: none;
+}
+
+#cancelBtn:hover {
+    background-color: darkred; /* Change to a darker shade on hover */
+    color: white; /* Change text color for better contrast */
+}
+
+#registerBtn:hover {
+    background-color: darkblue; /* Change to a darker shade on hover */
+    color: white; /* Change text color for better contrast */
+}

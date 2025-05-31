@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Admin - Sellers Application</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sellerapplication.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="mainnavbar">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- <li class="nav-item"><a class="nav-link" href="#" title="home"><img
+                        src="{{ url_for('static', filename='images/house-solid.svg') }}" width="23px"
+                        alt="Account"></a></li> -->
+                    <li class="nav-item"><a class="nav-link" href="#" id="notification-icon" title="notification"><img
+                                src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                                alt="Notification Icon"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('accountseller') }}" title="account"><img
+                                src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px"
+                                alt="Account"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout"
+                            onclick="confirmLogout(event);"><img
+                                src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="24px"
+                                alt="logout"></a></li>
+                </ul>
+            </div>
+        </nav>
+
+         <!-- Nav Sub Buttons -->
+         <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item"><a class="nav-link" href="{{url_for('sales')}}">Sales Report</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('admin')}}">Sellers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('display_buyer_info')}}">Buyers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('display_product_info')}}">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('new_seller')}}">Seller Application</a></li>
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="row1"></div>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Products Table -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Seller's Application</h2>
+
+        <!-- Container Div for Add Product Button and Search Bar -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+        </div>
+
+        <!-- Modal for notification -->
+        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Add your notification content here -->
+                        <p>No new notifications.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Shopname</th>
+                    <th>Date Submitted</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                {% for seller in sellers %}
+                <tr id="row-{{ seller[0] }}">
+                    <td>{{ seller[0] }}</td>
+                    <td><span id="name-{{ seller[0] }}">{{ seller[1] }}</span></td>
+                    <td><span id="email-{{ seller[0] }}">{{ seller[2] }}</span></td>
+                    <td><span id="shopname-{{ seller[0] }}">{{ seller[3] }}</span></td>
+                    <td><span id="date-{{ seller[0] }}">{{ seller[4] }}</span></td> <!-- Display submission date here -->
+                    <td>
+                        <button class="btn btn-info" onclick="showSellerDetails('{{ seller[0] }}')">View Details</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+
+    <!-- modal for viewing the application of the seller  -->
+    <div class="modal fade" id="sellerDetailsModal" tabindex="-1" role="dialog" aria-labelledby="sellerDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sellerDetailsModalLabel">Seller Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="display: none;"><strong>Seller No:</strong> <span id="sellerNo"></span></p>
+                    <p><strong>Name:</strong> <span id="sellerName"></span></p>
+                    <p><strong>Address:</strong> <span id="sellerAddress"></span></p>
+                    <p><strong>Birthday:</strong> <span id="sellerBirthday"></span></p>
+                    <p><strong>Gender:</strong> <span id="sellerGender"></span></p>
+                    <p><strong>Email:</strong> <span id="sellerEmail"></span></p>
+                    <p><strong>Contact:</strong> <span id="sellerContact"></span></p>
+                    <p><strong>Shop Name:</strong> <span id="sellerShopName"></span></p>
+
+                    <p style="display: none;"><strong>Username:</strong> <span id="sellerUserName"></span></p>
+                    <p style="display: none;"><strong>Password:</strong> <span id="sellerPassword"></span></p>
+
+                    <h5>Submitted ID</h5>
+                    <center><img id="idImage" src="#" alt="Submitted ID"></center>
+                    <p><a id="downloadId" href="#" class="btn btn-primary" download>DOWNLOAD</a></p>
+                    
+                    <h5>Business Permit</h5>
+                    <center><img id="businessPermitImage" src="#" alt="Business Permit"></center>
+                    <p><a id="downloadId" href="#" class="btn btn-primary" download>DOWNLOAD</a></p>
+                </div>
+                <div class="reason">
+                    <label for="Reason for Disapproval">If disapprove. Specify the reason here:</label>
+                    <textarea id="reason" name="reason" rows="4" cols="50">
+                    </textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="approveButton" class="btn btn-success" style="width: 120px;">Approve</button>
+                    <button type="button" id="declineButton" class="btn btn-danger" style="width: 120px;" disabled>Disapprove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Selecting Disapproval Reason -->
+    <div class="modal fade" id="disapproveReasonModal" tabindex="-1" role="dialog" aria-labelledby="disapproveReasonModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="disapproveReasonModalLabel">Reason for Disapproval</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="disapproveForm">
+                        <p>Select the reason for disapproval:</p>
+                        <div class="form-group">
+                            <select class="form-control" id="disapproveReason" name="disapproveReason" required>
+                                <option value="" disabled selected>Select a reason</option>
+                                <option value="Invalid ID">Invalid ID</option>
+                                <option value="Incomplete Business Permit">Incomplete Business Permit</option>
+                                <option value="Unverified Email">Unverified Email</option>
+                                <option value="Other">Other (Specify below)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="otherReasonGroup" style="display: none;">
+                            <label for="otherReason">Specify Other Reason</label>
+                            <textarea class="form-control" id="otherReason" name="otherReason" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="submitDisapprovalButton" class="btn btn-danger">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="path/to/your/custom.js"></script>
+
+    <script>
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        }
+
+    </script>
+    
+    <script>
+        // Open modal when the notification icon is clicked
+        document.getElementById('notification-icon').addEventListener('click', function (event) {
+            event.preventDefault();
+            $('#notificationModal').modal('show');
+        });
+    </script>
+   
+    <script>
+
+        function showSellerDetails(sellerNo) {
+            $.ajax({
+                url: `/get_seller_details/${sellerNo}`,
+                method: 'GET',
+                success: function(data) {
+                    if (data.seller_no) {
+                        $('#sellerNo').text(data.seller_no);
+                        $('#sellerName').text(data.name);
+                        $('#sellerAddress').text(data.address);
+                        $('#sellerBirthday').text(data.birthday);
+                        $('#sellerGender').text(data.gender);
+                        $('#sellerEmail').text(data.email);
+                        $('#sellerContact').text(data.contact);
+                        $('#sellerShopName').text(data.shopname);
+
+                        $('#sellerUserName').text(data.username);
+                        $('#sellerPassword').text(data.password);
+
+                        // Set the images in the modal
+                        if (data.uploadedid) {
+                            $('#idImage').attr('src', `data:image/jpeg;base64,${data.uploadedid}`).show();
+                        } else {
+                            $('#idImage').hide();
+                        }
+
+                        if (data.businesspermit) {
+                            $('#businessPermitImage').attr('src', `data:image/jpeg;base64,${data.businesspermit}`).show();
+                        } else {
+                            $('#businessPermitImage').hide();
+                        }
+
+                        // Show the modal
+                        $('#sellerDetailsModal').modal('show');
+                    } else {
+                        alert('Seller details not found');
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while fetching seller details.');
+                }
+            });
+        }
+
+
+    </script>
+
+    <script>// Triggered when the approve button is clicked
+
+        document.querySelector("#approveButton").addEventListener('click', function () {
+            var sellerNo = document.getElementById("sellerNo").textContent.trim(); // Get seller_no from modal
+            fetch('/approve_seller/' + sellerNo, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Seller approved successfully');
+                    // Optionally, close the modal or update the page to reflect the change
+                    $('#sellerDetailsModal').modal('hide'); // Close modal
+                    location.reload(); // Reload the page to reflect the changes
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while approving the seller.');
+            });
+        });
+
+    </script>
+
+    <script>
+        
+        // Enable the Disapprove button only if there is content in the textarea
+        document.getElementById("reason").addEventListener("input", function () {
+            const reasonContent = this.value.trim();
+            const declineButton = document.getElementById("declineButton");
+
+            if (reasonContent.length > 0) {
+                declineButton.disabled = false; // Enable button
+            } else {
+                declineButton.disabled = true; // Disable button
+            }
+        });
+
+        // Triggered when the Disapprove button is clicked
+        document.querySelector("#declineButton").addEventListener('click', function () {
+            const sellerNo = document.getElementById("sellerNo").textContent.trim(); // Get seller_no from modal
+            const reason = document.getElementById("reason").value.trim(); // Get reason from textarea
+
+            // Send POST request to disapprove the seller
+            fetch('/disapprove_seller/' + sellerNo, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ reason: reason }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Seller disapproved successfully. Email sent to the seller.');
+                        $('#sellerDetailsModal').modal('hide'); // Close modal
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while disapproving the seller.');
+                });
+        });
+
+    </script>
+
+   
+    
+</body>
+
+</html>

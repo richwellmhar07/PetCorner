@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | My Orders</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='myorder.css') }}">
+    <!-- Add Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="mainnavbar">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{{ url_for('show_products') }}">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px"
+                    alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#" title="notification">
+                        <img src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"alt="notification"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('cart')}}" title="cart">
+                        <img src="{{ url_for('static', filename='images/cart-solid.svg') }}" width="28px" alt="cart"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('my_orders')}}" title="my orders">
+                        <img src="{{ url_for('static', filename='images/order.png') }}" width="25px" alt="my orders"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account')}}" title="account">
+                        <img src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px" alt="Account"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout" onclick="confirmLogout(event);">
+                        <img src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="23px" alt="logout"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Nav Sub Buttons -->
+        <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}" id="homebtn">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}#Allproducts" id="ordersbtn">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}#categories" id="categoriesbtn">Categories</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!------------------ Modal for Notification ----------------->
+
+ 
+
+    <div class="orders-container">
+        <h1>My Orders</h1>
+    
+        <div class="order-tabs">
+            <button class="tab active" data-tab="to-ship"> <i class="fas fa-box"></i> To Ship</button>
+            <button class="tab" data-tab="to-receive"> <i class="fas fa-truck"></i> To Receive</button>
+            <button class="tab" data-tab="completed"> <i class="fas fa-check-circle"></i> Completed</button>
+            <button class="tab" data-tab="cancelled"> <i class="fas fa-times-circle"></i> Cancelled</button>
+        </div>
+    
+        <!-- Tab Content: To Ship --> 
+        <div class="tab-content active" id="to-ship">
+            {% for order_id, order_data in to_ship_orders.items() %}
+                <div class="order-card">
+                    <div class="shop-info">
+                        <p>Order No. {{ order_id }}</p>
+                        <p>Ordered Date: {{ order_data['ordered_date'] }}</p>
+                    </div>
+                    <div class="order-items">
+                        {% for item in order_data['items'] %}
+                            <div class="order-item">
+                                <p style="display: none;"><strong>Seller ID:</strong> {{ item.seller_id }}</p>
+                                <img src="{{ url_for('static', filename='images/' + item.productimage) }}" class="product-img" alt="{{ item.productname }}">
+                                <div class="item-info">
+                                    <p class="product-name">{{ item.productname }}</p>
+                                    <p class="price">Price: ₱{{ item.productprice }}</p>
+                                    <p class="quantity">x{{ item.productqty }}</p>
+                                    <p class="status">Status: {{ item.status }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="order-actions">
+                        <div class="leftside">
+                            <button 
+                                class="cancel-order-btn" 
+                                data-toggle="modal" 
+                                data-target="#cancelOrderModal" 
+                                data-order-id="{{ order_id }}" 
+                                data-ordered-date="{{ order_data['ordered_date'] }}" 
+                                data-status="{{ order_data['status'] }}">
+                                Cancel Order
+                            </button>
+                            <button 
+                                class="contact-seller-btn" 
+                                data-seller-id="{{ order_data['seller_id'] }}" 
+                                data-order-id="{{ order_id }}" 
+                                data-product-details='{{ order_data["items"] | tojson }}'>
+                                Contact Seller
+                            </button>
+                        </div>
+
+                        <div class="rightside">
+                            <div class="order-total">Order Total: <strong>₱{{ order_data['total'] }}</strong></div>
+                            <div class="shipping-fee">Shipping fee: ₱50.00</div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>No orders to ship.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Chatbox Modal -->
+        <div class="modal fade" id="chatboxModal" tabindex="-1" role="dialog" aria-labelledby="chatboxModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="chatboxModalLabel" style="color: rgb(59, 59, 59);">Chat with Seller</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Product Details Section -->
+                        <div id="product-details" class="product-details mb-3">
+                            <h6>Order Details</h6>
+                            <p style="display: none;"><strong>Order No.</strong> <span id="order-id"></span></p>
+                            <div id="product-list">
+                                <!-- Product details will be dynamically inserted here -->
+                            </div>
+                        </div>
+        
+                        <!-- Chat Messages Section -->
+                        <div id="chat-messages" class="chat-messages">
+                            <!-- Messages will be dynamically loaded here -->
+                        </div>
+                        <form id="chat-form">
+                            <div class="input-group">
+                                <input type="text" id="chat-input" class="form-control" placeholder="Type your message here..." required>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Send</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Cancel Order Modal -->
+        <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+                        <button type="button" class="close" onclick="closeModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p style="display: none;"><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+                        <p style="display: none;"><strong>User ID:</strong> {{ session['user_id'] }}</p>
+                        <p style="display: none;"><strong>Ordered Date:</strong> <span id="modalOrderedDate"></span></p>
+                        <!-- <p><strong>Status:</strong> <span id="modalStatus"></span></p> -->
+                        <hr>
+                        <p>Please select a reason for canceling the order:</p>
+                        <form id="cancelOrderForm">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cancelReason" id="reason1" value="Change of mind" required>
+                                <label class="form-check-label" for="reason1">Change of mind</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cancelReason" id="reason2" value="Found a better price">
+                                <label class="form-check-label" for="reason2">Found a better price</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cancelReason" id="reason3" value="Order placed by mistake">
+                                <label class="form-check-label" for="reason3">Order placed by mistake</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cancelReason" id="reason4" value="Other">
+                                <label class="form-check-label" for="reason4">Other</label>
+                            </div>
+                            <input type="hidden" id="cancelOrderId" name="order_id" value="">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger" id="submitCancelOrder">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab Content: To Receive -->
+        <div class="tab-content" id="to-receive">
+            {% for order_id, order_data in to_receive_orders.items() %}
+                <div class="order-card">
+                    <div class="shop-info">
+                        <p>Order No. {{ order_id }}</p>
+                        <div class="dates">
+                            <p>Ordered Date: {{ order_data['ordered_date'] }}</p>
+                            {% if order_data.get('shipped_date') %}
+                                <p>Shipped Date: {{ order_data['shipped_date'] }}</p> <!-- Display shipped date -->
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="order-items">
+                        {% for item in order_data['items'] %}
+                            <div class="order-item">
+                                <img src="{{ url_for('static', filename='images/' + item.productimage) }}" class="product-img" alt="{{ item.productname }}">
+                                <div class="item-info">
+                                    <p class="product-name">{{ item.productname }}</p>
+                                    <p class="price">Price: ₱{{ item.productprice }}</p>
+                                    <p class="quantity">x{{ item.productqty }}</p>
+                                    <p class="status">Status: {{ item.status }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="lastrow">
+                        <div class="priceright">
+                            <button class="order-received-btn" data-order-id="{{ order_id }}">Order Received</button>
+                        </div>
+                        
+                        <div class="buttonleft">
+                            <div class="order-total">Order Total: <strong>₱{{ order_data['total'] }}</strong></div>
+                            <div class="shipping-fee">Shipping fee: ₱50.00</div>
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+                <p>No orders to receive.</p>
+            {% endfor %}
+        </div>
+    
+        <!-- Tab Content: Completed -->
+        <div class="tab-content" id="completed">
+            {% for order_id, order_data in completed_orders.items() %}
+                {% for item in order_data['items'] %}
+                    <div class="order-card">
+                        <div class="shop-info">
+                            <p>Order No. {{ order_id }}</p>
+                            <div class="dates">
+                                <p>Ordered Date: {{ order_data['ordered_date'] }}</p>
+                            {% if order_data.get('shipped_date') %}
+                                <p>Shipped Date: {{ order_data['shipped_date'] }}</p> <!-- Display shipped date -->
+                            {% endif %}
+                            {% if order_data.get('received_date') %}
+                                <p>Received Date: {{ order_data['received_date'] }}</p> <!-- Display received date -->
+                            {% endif %}
+                            </div>
+                        </div>
+                        <div class="order-items">
+                                <div class="order-item">
+                                    <img src="{{ url_for('static', filename='images/' + item.productimage) }}" class="product-img" alt="{{ item.productname }}">
+                                    <div class="item-info">
+                                        <p class="sellerID" style="display: none;">Seller ID: {{ item.seller_id }}</p>
+                                        <p class="productID" style="display: none;">Product ID: {{ item.productid }}</p>
+                                        <p class="product-name">{{ item.productname }}</p>
+                                        <p class="price">Price: ₱{{ item.productprice }}</p>
+                                        <p class="quantity">x{{ item.productqty }}</p>
+                                        <p class="status">Status: {{ item.status }}</p>
+                                    </div>
+                                </div>
+                        </div>
+
+                        <div class="onerow">
+                            <div class="leftside">
+                                <button class="rate-button" 
+                                    data-toggle="modal" 
+                                    data-target="#feedbackModal" 
+                                    data-productid="{{ item.productid }}" 
+                                    data-sellerid="{{ item.seller_id }}">Send Feedback
+                                </button>
+                            </div>
+    
+                            <div class="rightside">
+                                <div class="order-total">Order Total: <strong>₱{{ order_data['total'] }}</strong></div>
+                                <div class="shipping-fee">Shipping fee: ₱50.00</div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                {% endfor %}
+            {% else %}        
+            {% endfor %}
+        </div>
+
+        <!-- Feedback Modal -->
+        <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="feedbackModalLabel">Rate Your Experience</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="feedbackForm">
+                            <!-- Displaying productid and seller_id as simple text -->
+                            <p style="display: none;">Product ID: <span id="modal_product_id"></span></p>
+                            <p style="display: none;">Seller ID: <span id="modal_seller_id"></span></p>
+
+                            <!-- Product Quality -->
+                            <div class="rating-category">
+                                <div class="rating-container">
+                                    <h6>Product Quality</h6>
+                                    <div class="stars" data-category="product_quality">
+                                        <i class="far fa-star" data-value="1"></i>
+                                        <i class="far fa-star" data-value="2"></i>
+                                        <i class="far fa-star" data-value="3"></i>
+                                        <i class="far fa-star" data-value="4"></i>
+                                        <i class="far fa-star" data-value="5"></i>
+                                    </div>
+                                    <span class="rating-message" id="product_quality_message"></span>
+                                </div>
+                            </div>
+                            <!-- Seller Service -->
+                            <div class="rating-category">
+                                <div class="rating-container">
+                                    <h6>Seller Service</h6>
+                                    <div class="stars" data-category="seller_service">
+                                        <i class="far fa-star" data-value="1"></i>
+                                        <i class="far fa-star" data-value="2"></i>
+                                        <i class="far fa-star" data-value="3"></i>
+                                        <i class="far fa-star" data-value="4"></i>
+                                        <i class="far fa-star" data-value="5"></i>
+                                    </div>
+                                    <span class="rating-message" id="seller_service_message"></span>
+                                </div>
+                            </div>
+                            <!-- Delivery Speed -->
+                            <div class="rating-category">
+                                <div class="rating-container">
+                                    <h6>Delivery Speed</h6>
+                                    <div class="stars" data-category="delivery_speed">
+                                        <i class="far fa-star" data-value="1"></i>
+                                        <i class="far fa-star" data-value="2"></i>
+                                        <i class="far fa-star" data-value="3"></i>
+                                        <i class="far fa-star" data-value="4"></i>
+                                        <i class="far fa-star" data-value="5"></i>
+                                    </div>
+                                    <span class="rating-message" id="delivery_speed_message"></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="submitFeedback">Submit Feedback</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Cancelled -->
+        <div class="tab-content" id="cancelled">
+            {% for order_id, order_data in cancelled_orders.items() %}
+                <div class="order-card">
+                    <div class="shop-info">
+                        <p>Order No. {{ order_id }}</p>
+                        <p>Ordered Date: {{ order_data['ordered_date'] }}</p>
+                    </div>
+                    <div class="order-items">
+                        {% for item in order_data['items'] %}
+                            <div class="order-item">
+                                <img src="{{ url_for('static', filename='images/' + item.productimage) }}" class="product-img" alt="{{ item.productname }}">
+                                <div class="item-info">
+                                    <p class="product-name">{{ item.productname }}</p>
+                                    <p class="price">Price: ₱{{ item.productprice }}</p>
+                                    <p class="quantity">x{{ item.productqty }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="order-total">Order Total: <strong>₱{{ order_data['total'] }}</strong></div>
+                    <div class="shipping-fee">Shipping fee: ₱50.00</div>
+                </div>
+            {% else %}
+            {% endfor %}
+        </div>
+    
+    </div>
+
+    
+
+</body>
+</html>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function confirmLogout() {
+        if (confirm("Are you sure you want to log out?")) {
+            window.location.href = "{{ url_for('login') }}";
+        }
+    }
+    </script>
+
+    <script> //switching tabs
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    console.log('Tab clicked:', tab); // Debug: Which tab was clicked
+                    const target = tab.getAttribute('data-tab');
+                    console.log('Target tab:', target);
+
+                    // Switch tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const targetContent = document.getElementById(target);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                        console.log('Activated tab content:', targetContent.id);
+                    } else {
+                        console.error('No content found for:', target);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalOrderId = document.getElementById('modalOrderId');
+            const modalOrderedDate = document.getElementById('modalOrderedDate');
+            const cancelOrderIdInput = document.getElementById('cancelOrderId');
+            let cancelOrderButton = null; // Variable to store the clicked button
+    
+            // Check localStorage for any disabled buttons
+            document.querySelectorAll('.cancel-order-btn').forEach(button => {
+                const orderId = button.getAttribute('data-order-id');
+                const buttonKey = `cancel_order_disabled_${orderId}`;
+    
+                // If button is disabled previously, keep it disabled
+                if (localStorage.getItem(buttonKey) === 'true') {
+                    button.disabled = true;
+                    button.textContent = 'Cancellation Requested'; // Optional: Update button text
+                }
+    
+                button.addEventListener('click', () => {
+                    cancelOrderButton = button; // Store the reference of the clicked button
+    
+                    // Check if the order_id exists in cancel_requests table
+                    fetch('/check_cancel_request', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ order_id: orderId }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.exists) {
+                            alert('Cancellation for this order has already been requested.');
+                            cancelOrderButton.disabled = true; // Disable the button immediately
+                            cancelOrderButton.textContent = 'Cancellation Requested'; // Optional: Update button text
+                            
+                            // Store the disabled state in localStorage
+                            localStorage.setItem(buttonKey, 'true');
+                            return;
+                        } else {
+                            // Populate modal fields
+                            modalOrderId.textContent = orderId;
+                            modalOrderedDate.textContent = button.getAttribute('data-ordered-date');
+                            cancelOrderIdInput.value = orderId;
+    
+                            // Show the modal
+                            $('#cancelOrderModal').modal('show');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking cancel request:', error);
+                        alert('An error occurred while checking the cancel request. Please try again.');
+                    });
+                });
+            });
+    
+            // Handle form submission
+            document.getElementById('submitCancelOrder').addEventListener('click', () => {
+                const reason = document.querySelector('input[name="cancelReason"]:checked')?.value;
+                const orderId = cancelOrderIdInput.value;
+                const orderedDate = modalOrderedDate.textContent;
+    
+                if (!reason) {
+                    alert('Please select a reason for canceling the order.');
+                    return;
+                }
+    
+                // Send data to the backend
+                fetch('/cancel_order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        order_id: orderId,
+                        ordered_date: orderedDate,
+                        reason: reason
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        closeModal(); // Close modal on success
+                        if (cancelOrderButton) {
+                            cancelOrderButton.disabled = true; // Disable the clicked button
+                            cancelOrderButton.textContent = 'Cancellation Requested'; // Update button text (optional)
+    
+                            // Store the disabled state in localStorage
+                            const buttonKey = `cancel_order_disabled_${orderId}`;
+                            localStorage.setItem(buttonKey, 'true');
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to submit cancel request. Please try again.');
+                });
+            });
+    
+            // Function to close the modal
+            function closeModal() {
+                $('#cancelOrderModal').modal('hide');
+            }
+    
+            // Event listener to handle modal close
+            $('#cancelOrderModal').on('hidden.bs.modal', () => {
+                if (cancelOrderButton) {
+                    cancelOrderButton.disabled = true; // Ensure the button is disabled after modal closes
+                }
+            });
+        });
+    </script>
+    
+    
+    <script> //close modal 
+        function closeModal() {
+            $('#cancelOrderModal').modal('hide');
+        }
+    </script>
+    
+    <script>
+        document.querySelectorAll('.order-received-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = this.getAttribute('data-order-id');
+    
+                // Send POST request to backend
+                fetch(`/order-received/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        // Reload the tab to refresh the content
+                        location.reload();
+                    } else {
+                        alert(`Error: ${data.error}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    </script>
+
+    <script>    //function for feedback
+        document.addEventListener("DOMContentLoaded", () => {
+            // Track ratings for each category
+            const ratings = {
+                product_quality: '',
+                seller_service: '',
+                delivery_speed: '',
+            };
+    
+            // Rating messages mapping
+            const ratingMessages = {
+                1: "Terrible",
+                2: "Poor",
+                3: "Fair",
+                4: "Good",
+                5: "Amazing",
+            };
+    
+            // Populate productid and seller_id when opening modal
+            $('#feedbackModal').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget); // Button that triggered the modal
+                const product_id = button.data('productid'); // Extract info from data-* attributes
+                const seller_id = button.data('sellerid');
+    
+                console.log("Product ID:", product_id); // Debugging
+                console.log("Seller ID:", seller_id);   // Debugging
+    
+                // Populate modal placeholders
+                $('#modal_product_id').text(product_id || "N/A");
+                $('#modal_seller_id').text(seller_id || "N/A");
+    
+                // Reset other modal fields if needed
+                $(".stars i").each(function () {
+                    $(this).removeClass("fas").addClass("far");
+                });
+                $(".rating-message").each(function () {
+                    $(this).text('');
+                });
+    
+                // Fetch existing ratings from backend for this product and seller
+                fetch(`/get_existing_ratings?product_id=${product_id}&seller_id=${seller_id}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            // Fill in the ratings (if available) and update the star display
+                            for (const category in ratings) {
+                                if (data.ratings[category] !== undefined) {
+                                    const value = data.ratings[category];
+                                    ratings[category] = ratingMessages[value]; // Store the message instead of the value
+                                    // Update the stars display based on existing value
+                                    $(`.stars[data-category=${category}] i`).each(function (index) {
+                                        $(this).toggleClass("fas", index < value); // Filled star
+                                        $(this).toggleClass("far", index >= value); // Empty star
+                                    });
+    
+                                    // Update the rating message
+                                    const messageElement = $(`#${category}_message`);
+                                    if (messageElement) {
+                                        messageElement.text(ratingMessages[value]);
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    .catch((error) => console.error('Error fetching existing ratings:', error));
+            });
+    
+            // Handle star click
+            $(".stars i").on('click', function () {
+                const category = $(this).parent().data('category');
+                const value = parseInt($(this).data('value'));
+    
+                // Update ratings with the message
+                ratings[category] = ratingMessages[value];
+    
+                // Update star display
+                $(this).parent().children('i').each(function (index) {
+                    $(this).toggleClass("fas", index < value); // Filled star
+                    $(this).toggleClass("far", index >= value); // Empty star
+                });
+    
+                // Update the rating message
+                const messageElement = $("#" + category + "_message");
+                if (messageElement) {
+                    messageElement.text(ratingMessages[value]);
+                }
+            });
+
+            // Submit feedback
+            $('#submitFeedback').on('click', function () {
+                const product_id = $('#modal_product_id').text();
+                const seller_id = $('#modal_seller_id').text();
+    
+                // Ensure all ratings are included
+                const feedbackData = {
+                    product_id: product_id,
+                    seller_id: seller_id,
+                    product_quality: ratings.product_quality,
+                    seller_service: ratings.seller_service,
+                    delivery_speed: ratings.delivery_speed,
+                };
+    
+                console.log(feedbackData); // Log data for debugging
+    
+                // Send this to the server via AJAX
+                fetch('/submit_feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(feedbackData),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        alert('Feedback submitted successfully!');
+                        $('#feedbackModal').modal('hide'); // Close the modal
+
+                        // Disable the corresponding feedback button
+                        $(`button.rate-button[data-productid="${product_id}"][data-sellerid="${seller_id}"]`)
+                            .prop('disabled', true)
+                            .text(' Submitted');
+                    })
+                    .catch((error) => console.error('Error:', error));
+            });
+    
+        });
+    </script>
+<!------------------------------ contact seller ------------------------------>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const contactSellerButtons = document.querySelectorAll('.contact-seller-btn');
+            const chatboxModal = new bootstrap.Modal(document.getElementById('chatboxModal'));
+            let currentSellerId = null;
+            let currentOrderId = null; // Track the current order ID
+            let userId = 'YOUR_USER_ID'; // Replace with the actual user ID from the session
+
+            contactSellerButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    const sellerId = button.dataset.sellerId;
+                    const orderId = button.dataset.orderId;
+                    const productDetails = JSON.parse(button.dataset.productDetails);
+
+                    currentOrderId = orderId; // Store the order Id
+                    currentSellerId = sellerId;
+
+                    // Populate order details and product list
+                    document.getElementById('order-id').textContent = orderId;
+                    const productList = document.getElementById('product-list');
+                    productList.innerHTML = ''; // Clear previous product list
+
+                    productDetails.forEach((product) => {
+                        const productHTML = `
+                            <div class="product-item d-flex mb-2">
+                                <img src="/static/images/${product.productimage}" alt="${product.productname}" class="product-img" style="width: 50px; height: 50px; margin-right: 10px;">
+                                <div>
+                                    <p class="product-name"><strong>${product.productname}</strong></p>
+                                    <p class="price">Price: ₱${product.productprice}</p>
+                                    <p class="quantity" style="display: none;">Quantity: x${product.productqty}</p>
+                                    <p class="status" style="display: none;">Status: ${product.status}</p>
+                                </div>
+                            </div>
+                        `;
+                        productList.innerHTML += productHTML;
+                    });
+
+                    // Open the modal
+                    chatboxModal.show();
+
+                    // Load chat messages when the modal is shown
+                    loadChatMessages(sellerId, userId);
+                });
+            });
+
+            // Function to load chat messages
+            function loadChatMessages(sellerId, userId) {
+                fetch(`/get_chat_messages?seller_id=${sellerId}&user_id=${userId}`)
+                    .then(response => response.json())
+                    .then(messages => {
+                        const chatMessagesDiv = document.getElementById('chat-messages');
+                        chatMessagesDiv.innerHTML = ''; // Clear existing messages
+
+                        if (messages.error) {
+                            chatMessagesDiv.innerHTML = `<p class="text-danger">${messages.error}</p>`;
+                            return;
+                        }
+
+                        if (messages.length === 0) {
+                            chatMessagesDiv.innerHTML = '<p>No messages found.</p>';
+                        } else {
+                            messages.forEach(msg => {
+                                const messageDiv = document.createElement('div');
+                                messageDiv.classList.add('message');
+                                const sender = msg.sender_role === 'buyer' ? 'You' : 'Seller';
+                                messageDiv.innerHTML = `<strong>${sender}:</strong> ${msg.message_text}`;
+                                chatMessagesDiv.appendChild(messageDiv);
+                            });
+
+                            // Scroll to the bottom of the chat
+                            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching chat messages:', error);
+                        const chatMessagesDiv = document.getElementById('chat-messages');
+                        chatMessagesDiv.innerHTML = '<p class="text-danger">Unable to load chat messages. Please try again later.</p>';
+                    });
+            }
+
+            // Handle chat form submission
+            const chatForm = document.getElementById('chat-form');
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const chatInput = document.getElementById('chat-input');
+                const message = chatInput.value;
+
+                if (!currentSellerId) {
+                    alert('Seller ID is not defined. Please try again.');
+                    return;
+                }
+
+                fetch('/send_message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ seller_id: currentSellerId, user_id: userId, order_id: currentOrderId, message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Immediately add the new message to the chatbox
+                        const chatMessagesDiv = document.getElementById('chat-messages');
+                        const messageDiv = document.createElement('div');
+                        const sender = 'You'; // Since we're assuming the buyer is sending the message
+                        messageDiv.classList.add('message');
+                        messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+                        chatMessagesDiv.appendChild(messageDiv);
+
+                        // Scroll to the bottom of the chat
+                        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+
+                        chatInput.value = ''; // Clear input field
+                    } else {
+                        console.error('Failed to send message:', data.error);
+                        alert('Failed to send the message. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending message:', error);
+                    alert('An error occurred while sending your message. Please try again.');
+                });
+            });
+        });
+
+    </script>
+    
+
+
+</body>
+
+</html>

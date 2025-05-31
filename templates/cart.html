@@ -1,0 +1,530 @@
+<!DOCTYPE html> 
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Cart</title>
+
+   
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='cart.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="mainnavbar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" id="Homepage">
+            <a class="navbar-brand" href="{{ url_for('show_products') }}">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+              
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#" title="notification">
+                        <img src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="25px"alt="notification"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('cart')}}" title="cart">
+                        <img src="{{ url_for('static', filename='images/cart-solid.svg') }}" width="28px" alt="cart"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('my_orders')}}" title="my orders">
+                        <img src="{{ url_for('static', filename='images/order.png') }}" width="25px" alt="my orders"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account')}}" title="account">
+                        <img src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px" alt="Account"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout" onclick="confirmLogout(event);">
+                        <img src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="23px" alt="logout"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Nav Sub Buttons -->
+        <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}" id="homebtn">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}#Allproducts" id="productsbtn">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}#categories" id="categoriesbtn">Categories</a></li>
+            </ul>
+        </div>
+    </div>
+
+       <!------------------ Modal for Notification ----------------->
+
+       <div class="modal fade modal-right" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <div class="notification-item mb-3 d-flex align-items-center justify-content-between" id="notification-{{ notification.id }}">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="{{ notification[1] }}" class="notification-link">
+                                    <p><strong>{{ notification[0] }}</strong></p>
+                                    <small class="text-muted">{{ notification[2] }}</small>
+                                </a>
+                                <button type="button" class="btn btn-link close-notification" data-notification-id="{{ notification.id }}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No new notifications.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="cart-container">
+    <h4>Your Cart</h4>
+
+    {% if cart_items %}
+    <!-- Show table only if there are items -->
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th style="display: none;">CID</th>
+                <th style="display: none;">PID</th>
+                <th style="display: none;">Shop</th>
+                <th style="display: none;">Seller ID</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="cart-items">
+            {% for item in cart_items %}
+            <tr data-cartid="{{ item[0] }}">
+                <td><input type="checkbox" class="cart-checkbox"></td>
+                <td style="display: none;">{{ item[0] }}</td>
+                <td style="display: none;">{{ item[1] }}</td>
+                <td style="display: none;">{{ item[6] }}</td>
+                <td style="display: none;">{{ item[7] }}</td>
+                <td style="text-align: left;">
+                    <img src="{{ url_for('static', filename='images/' + item[3]) }}" alt="{{ item[2] }}" width="50" style="margin-right: 10px;">
+                    {{ item[2] }}
+                </td>
+                <td>₱{{ item[4] }}</td>
+                <td>
+                    <input type="number" min="1" value="{{ item[5] }}" class="quantity">
+                </td>
+                <td class="item-total">₱{{ item[4] * item[5] }}</td>
+                <td>
+                    <button class="delete-btn" onclick="deleteCartItem('{{ item[0] }}')">
+                        <img src="{{ url_for('static', filename='images/trash-solid.svg')}}" width="25px" alt="delete">
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-summary">
+        <p><strong>Total:</strong> <span id="subtotal">₱0</span></p>
+        <button id="checkout-btn">Checkout</button>
+    </div>
+
+    {% else %}
+    <!-- Show empty state if cart is empty -->
+    <div class="empty-cart text-center mt-5">
+        <img src="{{ url_for('static', filename='images/empty-cart.png') }}" alt="Empty Cart" width="150">
+        <h3 class="mt-3">Your cart is empty.</h3>
+        <p>Looks like you haven’t added anything yet.</p>
+        <a href="{{ url_for('show_products') }}" class="btn btn-warning mt-2" style="padding: 10px 20px; font-size: 16px; border-radius: 20px; font-weight: bold; color: white; background-color: #FFC107; transition: background-color 0.3s ease;">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal fade checkout-modal" tabindex="-1" role="dialog" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="checkoutModalLabel">Checkout Summary</h5>
+                    <button type="button" class="close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modalbody">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="display: none;">CID</th>
+                                <th style="display: none;">PID</th>
+                                <th style="display: none;">SID</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checkout-items"></tbody>
+                    </table>
+                    <div class="modaltext">
+                        <p><strong>Total:</strong> <span id="checkout-subtotal">₱0.00</span></p>
+                        <p><strong>Delivery Fee:</strong> <span id="checkout-delivery-fee">₱50.00</span></p>
+                        <p><strong>Total Amount:</strong> <span id="checkout-total">₱0.00</span></p>
+                    </div>
+                
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmCheckout()">Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        }
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartItems = document.getElementById('cart-items');
+            const subtotalElement = document.getElementById('subtotal');
+    
+            // Function to update the subtotal based on checked items
+            const updateSubtotal = () => {
+                let subtotal = 0;
+                document.querySelectorAll('.cart-checkbox:checked').forEach((checkbox) => {
+                    const row = checkbox.closest('tr');
+                    const itemTotal = parseFloat(row.querySelector('.item-total').textContent.replace('₱', '')) || 0;
+                    subtotal += itemTotal;
+                });
+                subtotalElement.textContent = `₱${subtotal.toFixed(2)}`;
+            };
+    
+            // Event listener for quantity input changes
+            cartItems.addEventListener('input', (event) => {
+                if (event.target.classList.contains('quantity')) {
+                    const row = event.target.closest('tr');
+                    const cartid = row.getAttribute('data-cartid'); // Retrieve cart ID
+                    const price = parseFloat(row.cells[6].textContent.replace('₱', '')); // Assuming price is in the 5th column
+                    let quantity = parseInt(event.target.value);
+    
+                    if (quantity < 1) {
+                        event.target.value = 1;
+                        alert('Quantity must be at least 1.');
+                        return;
+                    }
+    
+                    // AJAX request to check stock availability
+                    fetch('/update_cart_quantity', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ cartid: cartid, quantity: quantity })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            alert('Error: ' + (data.error || 'Unknown error'));
+    
+                            if (data.max_stock) {
+                                event.target.value = data.max_stock; // Reset to max stock if exceeded
+                                quantity = data.max_stock;
+                            }
+                        }
+    
+                        // Update the item total for this row
+                        const newTotal = price * quantity;
+                        row.querySelector('.item-total').textContent = `₱${newTotal.toFixed(2)}`;
+    
+                        // Recalculate subtotal if the item is checked
+                        if (row.querySelector('.cart-checkbox').checked) {
+                            updateSubtotal();
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            });
+    
+            // Event listener for checkbox changes to update subtotal
+            cartItems.addEventListener('change', (event) => {
+                if (event.target.classList.contains('cart-checkbox')) {
+                    updateSubtotal();
+                }
+            });
+    
+        });
+    </script>
+    
+
+    <script> // populating the modal
+
+        document.getElementById("checkout-btn").addEventListener("click", function () {
+            fetchCheckoutData();
+        });
+
+        function fetchCheckoutData() {
+                
+            const selectedItems = [];
+            document.querySelectorAll('.cart-checkbox:checked').forEach((checkbox) => {
+                const row = checkbox.closest('tr');
+                selectedItems.push({
+                    cartid: row.getAttribute('data-cartid'), 
+                    productid: row.cells[2].innerText.trim(),
+                    sellerid: row.cells[4].innerText.trim(),
+                    productname: row.cells[5].innerText.trim(),
+                    productprice: parseFloat(row.cells[6].innerText.replace('₱', '')),
+                    productqty: parseInt(row.querySelector('.quantity').value),                        productimage: row.querySelector('img').getAttribute('src').split('/').pop()
+                });
+            });
+
+            if (selectedItems.length === 0) {
+                alert("Please select an item to checkout.");
+                return;
+            }
+
+            // Generate modal content from selected items
+            const checkoutItems = document.getElementById("checkout-items");
+            checkoutItems.innerHTML = ""; // Clear existing items
+
+            let subtotal = 0;
+            const deliveryFee = 50.00; // Default delivery fee
+
+            selectedItems.forEach(item => {
+                const itemSubtotal = item.productprice * item.productqty;
+                subtotal += itemSubtotal;
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td style="display: none;">${item.cartid}</td> <!-- Added CID -->
+                    <td style="display: none;">${item.productid}</td> <!-- Added PID -->
+                    <td style="display: none;">${item.sellerid}</td> <!-- Added SID -->
+                    <td>
+                        <img src="/static/images/${item.productimage}" width="50" style="margin-right: 10px;">
+                        ${item.productname}
+                    </td>
+                    <td>₱${item.productprice.toFixed(2)}</td>
+                    <td>${item.productqty}</td>
+                    <td>₱${itemSubtotal.toFixed(2)}</td>
+                `;
+                checkoutItems.appendChild(row);
+            });
+
+            // Calculate the total amount including delivery fee
+            const totalAmount = subtotal + deliveryFee;
+
+            // Update the subtotal, delivery fee, and total amount in the modal
+            document.getElementById("checkout-subtotal").textContent = `₱${subtotal.toFixed(2)}`;
+            document.getElementById("checkout-delivery-fee").textContent = `₱${deliveryFee.toFixed(2)}`;
+            document.getElementById("checkout-total").textContent = `₱${totalAmount.toFixed(2)}`;
+
+            // Show the modal
+            $('#checkoutModal').modal('show');
+                
+        }
+
+    </script>
+
+    <script> // script for delete item in the cart
+        function deleteCartItem(cartid) {
+            fetch('/delete_cart_item', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cartid: cartid })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the row
+                    const row = document.querySelector(`tr[data-cartid="${cartid}"]`);
+                    if (row) {
+                        row.remove();
+                    }
+
+                    // Check if cart is now empty
+                    const remainingItems = document.querySelectorAll('#cart-items tr');
+                    if (remainingItems.length === 0) {
+                        // If empty, reload the page to trigger the empty-cart view
+                        location.reload();
+                    }
+                } else {
+                    alert('Error deleting item from cart: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+    <script>
+        function confirmCheckout() {
+            const orderedItems = [];
+            let totalAmount = 0;
+    
+            // Collect all the items from the checkout table
+            document.querySelectorAll('#checkout-items tr').forEach(row => {
+                const item = {
+                    cartid: row.cells[0].innerText,            // CID
+                    productid: row.cells[1].innerText,         // PID
+                    sellerid: row.cells[2].innerText.trim(),   // SID
+                    productname: row.cells[3].innerText.trim(),
+                    productprice: parseFloat(row.cells[4].innerText.replace('₱', '')),
+                    productqty: parseInt(row.cells[5].innerText),
+                    subtotal: parseFloat(row.cells[6].innerText.replace('₱', ''))
+                };
+                orderedItems.push(item);
+                totalAmount += item.subtotal;
+            });
+    
+            const data = {
+                total_amount: totalAmount, // Send the total amount
+                ordered_items: orderedItems
+            };
+    
+            // Send the order details to the Flask backend
+            fetch('/place_order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Order placed successfully!');
+                    window.location.href = '/order_confirmation';
+    
+                    // Remove items from the cart after placing the order
+                    orderedItems.forEach(item => {
+                        const row = document.querySelector(`[data-cartid="${item.cartid}"]`);
+                        if (row) {
+                            row.remove();
+                        }
+                    });
+    
+                    // Reset the total to zero after placing the order
+                    document.getElementById("subtotal").innerText = "₱0";
+                } else {
+                    alert('Error placing order: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong!');
+            });
+    
+            closeModal();
+        }
+    </script>
+    
+
+    <script> //close modal 
+        function closeModal() {
+            $('#checkoutModal').modal('hide');
+        }
+    </script>
+
+    <script>  // for notification
+        document.querySelector("[title='notification']").addEventListener("click", function(event) {
+            event.preventDefault();
+            $('#notificationModal').modal('show');
+        });
+    </script>
+
+    <script> // for notification
+        function checkForNewApplications() {
+            fetch('/get_new_applications')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.newApplications) {
+                        // Display notification modal
+                        document.getElementById('notificationModal').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error checking new applications:', error));
+        }
+        // Poll the server every 10 seconds
+        setInterval(checkForNewApplications, 10000);
+    </script>
+    
+
+    <script>
+        document.querySelectorAll('.close-notification').forEach(function(button) {
+            button.addEventListener('click', function() {
+              
+                const notificationItem = this.closest('.notification-item');
+                if (notificationItem) {
+                    notificationItem.remove();
+                }
+            });
+        });
+        </script>
+
+        <script>document.querySelectorAll('.close-notification').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const notificationId = this.getAttribute('data-notification-id');
+                
+              
+                fetch('/dismiss_notification/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ notification_id: notificationId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                       
+                        this.closest('.notification-item').style.display = 'none';
+                    }
+                });
+            });
+        });
+        </script>
+
+        <script>
+            // Inline animation: change background color on hover
+            const btn = document.querySelector('.btn-warning.mt-2');
+            btn.addEventListener('mouseenter', () => {
+                btn.style.backgroundColor = '#e6ac00'; // Slightly darker shade on hover
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.backgroundColor = '#FFC107'; // Original color on mouse leave
+            });
+        </script>
+
+</body>
+
+</html>

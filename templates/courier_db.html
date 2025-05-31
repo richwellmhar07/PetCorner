@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Courier</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='courier_db.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="mainnavbar">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px"
+                    alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('courierdb') }}" title="home"><img
+                        src="{{ url_for('static', filename='images/house-solid.svg') }}" width="23px"
+                        alt="Account"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" title="notification"><img
+                                src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                                alt="Account"></a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="{{url_for('accountseller') }}" title="account"><img
+                                src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px"
+                                alt="Account"></a></li> -->
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout"
+                            onclick="confirmLogout(event);"><img
+                                src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="24px"
+                                alt="logout"></a></li>
+
+                </ul>
+            </div>
+        </nav>
+        <!-- Nav Sub Buttons -->
+        <!-- <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('courierdb') }}" id="homebtn" style="color: blue;">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('courierdb') }}" id="ordersbtn">For Pick-Up</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('courierdb') }}" id="requestsbtn">Delivered</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('courierdb') }}" id="sellersalesbtn">Income</a></li>
+            </ul>
+        </div> -->
+
+    </div>
+
+    <!---------------------------------------------------------------------------------------->
+
+    <div class="trans-container">
+        <div class="order-tabs">
+            <button class="tab active" data-tab="to-pickup">
+                <i class="fas fa-box-open"></i> For Pick-Up</button>
+            <button class="tab" data-tab="for-deliver">
+                <i class="fas fa-truck"></i> For Deliver</button>
+            <button class="tab" data-tab="delivered">
+                <i class="fas fa-check-circle"></i> Delivered</button>
+            <button class="tab" data-tab="ratings">
+                <i class="fas fa-star"></i> Ratings</button>
+            <button class="tab" data-tab="income">
+                <i class="fas fa-wallet"></i> Income</button>
+        </div>
+    
+        <!-- Tab Content: To Pickup --> 
+        <div class="tab-content active" id="to-pickup">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="vertical-align: top;">Date</th>
+                        <th style="vertical-align: top;">SID</th>
+                        <th style="vertical-align: top;">Shop</th>
+                        <th style="vertical-align: top;">Pick-up Address</th>
+                        <th style="vertical-align: top;">OID</th>
+                        <th style="vertical-align: top;">Buyer</th>
+                        <th style="vertical-align: top;">Address</th>
+                        <th style="vertical-align: top;">Contact</th>
+                        <th style="vertical-align: top;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in pickup_orders %}
+                    <tr>
+                        <td>{{ order.date }}</td>
+                        <td>{{ order.seller_id }}</td>
+                        <td>{{ order.shopname }}</td>
+                        <td>{{ order.seller_address }}</td>
+                        <td>{{ order.order_id }}</td>
+                        <td>{{ order.buyer }}</td>
+                        <td>{{ order.buyer_address }}</td>
+                        <td>{{ order.phonenumber }}</td>
+                        <td>
+                            <select class="status-dropdown" data-order-id="{{ order.order_id }}" {% if order.status == 'Picked up' %}disabled{% endif %}>
+                                <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Picked up" {% if order.status == 'Picked up' %}selected{% endif %}>Picked up</option>
+                            </select>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab Content: For Deliver -->
+        <div class="tab-content" id="for-deliver">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="vertical-align: top;">Date</th>
+                        <th style="vertical-align: top;">OID</th>
+                        <th style="vertical-align: top;">Buyer</th>
+                        <th style="vertical-align: top;">Pick-up Address</th>
+                        <th style="vertical-align: top;">Delivery Address</th>
+                        <th style="vertical-align: top;">Contact</th>
+                        <th style="vertical-align: top;">Delivery Fee</th>
+                        <th style="vertical-align: top;">Total Order Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab Content: Delivered -->
+        <div class="tab-content" id="delivered">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="vertical-align: top;">OID</th>
+                        <th style="vertical-align: top;">Buyer</th>
+                        <th style="vertical-align: top;">Delivered Date</th>
+                        <th style="vertical-align: top;">Pick-up Address</th>
+                        <th style="vertical-align: top;">Delivery Address</th>
+                        <th style="vertical-align: top;">Contact</th>
+                        <th style="vertical-align: top;">Delivery Fee</th>
+                        <th style="vertical-align: top;">Total Order Value</th>
+                        <th style="vertical-align: top;">Proof of Delivery</th>
+                        <th style="vertical-align: top;">Payment Mode</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab Content: Ratings -->
+        <div class="tab-content" id="ratings">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="vertical-align: top;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab Content: Income -->
+        <div class="tab-content" id="income">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="vertical-align: top;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script> //switching tabs and updating page title
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // Map tab data attributes to page titles
+            const tabTitles = {
+                "to-pickup": "Pet Corner | Courier - For Pick-Up",
+                "for-deliver": "Pet Corner | Courier - For Deliver",
+                "delivered": "Pet Corner | Courier - Delivered",
+                "ratings": "Pet Corner | Courier - Ratings",
+                "income": "Pet Corner | Courier - Income"
+            };
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.getAttribute('data-tab');
+
+                    // Switch tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const targetContent = document.getElementById(target);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+
+                    // Update the page title
+                    if (tabTitles[target]) {
+                        document.title = tabTitles[target];
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        function confirmLogout() {
+        if (confirm("Are you sure you want to log out?")) {
+            window.location.href = "{{ url_for('login') }}";
+        }
+    }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const statusDropdowns = document.querySelectorAll(".status-dropdown");
+
+            statusDropdowns.forEach(dropdown => {
+                // Disable dropdown if status is already "Picked up" on page load
+                if (dropdown.value === "Picked up") {
+                    dropdown.disabled = true;
+                }
+
+                dropdown.addEventListener("change", function () {
+                    const orderId = this.getAttribute("data-order-id");
+                    const newStatus = this.value;
+
+                    if (newStatus === "Picked up") {
+                        fetch("/update_pickup_status", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ order_id: orderId, status: newStatus })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Order status updated to 'Picked up' successfully!");
+                                // Disable the dropdown after successful update
+                                dropdown.disabled = true;
+                            } else {
+                                alert("Error updating status: " + data.error);
+                            }
+                        })
+                        .catch(error => console.error("Error:", error));
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

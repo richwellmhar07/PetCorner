@@ -1,0 +1,382 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.mainnavbar{
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    height: 80px;
+    background-color: #2f2f30 !important;
+}
+
+.logo {
+    padding-top: 40px;
+}
+
+nav {
+    flex: 1;
+    text-align: right;
+}
+
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+/* Icon buttons in the navbar */
+.navbar-nav .nav-link img {
+    width: 23px;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+    filter: invert(5%); /* Adjust initial color (lighten) */
+}
+
+/* Enlarge the icon and change color on hover */
+.navbar-nav .nav-link img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+ 
+
+input {
+    width: 50%;
+    height: 35px;
+    padding: 2px;
+}
+
+.custom-search input#search {
+    width: 500px !important; /* Custom width with !important */
+    border-radius: 10px;
+    border: solid 1px;
+    padding-left: 10px;
+    padding-right: 40px; /* Add padding to the right for the icon */
+}
+
+.input-group {
+    position: relative; /* Position relative to place icon inside input */
+}
+
+/* Position the search icon inside the input */
+.input-group-text {
+    position: absolute;
+    top: 50%; /* Vertically center the icon */
+    right: 10px; /* Position from the right */
+    transform: translateY(-50%);
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+    padding: 0;
+}
+
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust color (optional) */
+    transition: transform 0.3s ease; /* Smooth transition on hover */
+}
+
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(100%); /* Fully invert the color on hover */
+}
+
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black; /* Change the color to black */
+    font-size: 15px;
+}
+
+.NavSubButtons ul li a:hover {
+    color: #412ef0; 
+}
+
+.table tbody tr:hover {
+    background-color: #fffa97;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th{
+    white-space: normal;            /* Prevent wrapping  nowrap */
+    background-color: #2f2f30;
+    color: #ffffff;
+}
+
+.table td {
+    white-space: normal;            /* Prevent wrapping  nowrap */
+    background-color: #ffffff;
+    color: #2f2f30;
+}
+
+@media (max-width: 768px) {
+    .navbar-brand img {
+        width: 150px;
+    }
+    nav ul {
+        text-align: left;
+        padding-top: 20px;
+    }
+    .input-group-prepend {
+        display: none;
+    }
+    .input-field {
+        width: 100%;
+    }
+}
+ 
+.NavSubButtons {
+    flex: 1;
+    text-align: center;
+    background-color: #ffc107;
+}
+
+.NavSubButtons ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 5px 0;
+    font-weight: 800;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.NavSubButtons ul li {
+    display: inline-block;
+    margin-right: 100px;
+}
+
+/* Default link color in the navbar */
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff; /* White color by default */
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+}
+
+/* Link color when hovered */
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #ffc107; /* Yellowish color when hovered */
+}
+
+/* Update the search icon color */
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust initial color (lighten) */
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Change the icon color on hover */
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+
+
+.row1{
+    padding: 0px 50px;
+    padding-top: 130px;
+}
+
+
+
+/* Styles for the update button */
+
+.modal {
+    z-index: 1050 !important;
+}
+
+/* Modal Styling */
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 0px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1200px; /* Further reduced max-width */
+    margin: auto;
+    overflow: hidden;
+}
+
+/* Modal Header Styling */
+.modal-header {
+    background-color: #ffd51a; /* Soft blue background */
+    color: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-title {
+    font-size: 25px;
+    font-weight: bolder;
+    padding: 10px;
+}
+
+/* Close Button Styling */
+.close {
+    color: #fff;
+    font-size: 25px;
+    padding: 0px;
+    margin: 0px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.close:hover,
+.close:focus {
+    opacity: 1;
+    cursor: pointer;
+}
+
+/* Modal Body Styling */
+.modal-body {
+    font-size: 0.95rem;
+    color: #555;
+    height: 550px;
+    overflow-y: auto; /* Allows scrolling within the body if content exceeds max height */
+    padding-right: 0px;
+}
+
+.modal-body p {
+    margin-bottom: 8px;
+}
+
+/* Seller Info Sections */
+.modal-body .row {
+    margin-bottom: 12px;
+}
+
+.modal-body .col-6 {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
+/* Section Titles */
+h5 {
+    color: #333;
+    font-size: 28px;
+    font-weight: bolder;
+    margin-top: 25px;
+    border-bottom: 0px;
+    padding-top: 18px;
+    padding-bottom: 20px;
+    margin: 0px; /* Reset margin */
+    text-align: center; /* Centers the text */
+}
+
+/* Image Styling */
+#idImage, #businessPermitImage {
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 300px;
+    margin-bottom: 20px;
+}
+
+/* Download Button Styling */
+a.btn {
+    font-size: 16px;
+    font-weight: bolder;
+    padding: 6px 12px;
+    border-radius: 25px;
+    background-color: #ffffff;
+    color: #007bff;
+    text-decoration: none;
+    text-align: center;
+    border: 2px solid #007bff;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+a.btn:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Buttons in the Footer */
+.modal-footer {
+    padding: 10px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-footer button {
+    font-size: 0.85rem;
+    padding: 8px 14px;
+    border-radius: 25px;
+    width: 45%;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+/* Approve Button */
+#approveButton {
+    background-color: #ffffff;
+    color: #28a745;
+    border: 2px solid #28a745;
+    font-weight: bolder;
+    box-shadow: 0 4px 8px rgba(27, 114, 47, 0.3);
+}
+
+#approveButton:hover {
+    background-color: #28a745;
+    color: #ffffff;
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+/* Decline Button */
+#declineButton {
+    background-color: #ffffff00;
+    color: #dc3545;
+    border: 2px solid #dc3545;
+    font-weight: bolder;
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+#declineButton:hover {
+    background-color: #c82333;
+    color: #ffffff;
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%; /* Even smaller modal on mobile */
+        padding: 12px;
+    }
+    .modal-header {
+        padding: 8px;
+    }
+    .modal-body {
+        font-size: 0.85rem;
+    }
+    .modal-footer button {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    .modal-footer button:last-child {
+        margin-bottom: 0;
+    }
+}

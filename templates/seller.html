@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Seller</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='seller.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="mainnavbar">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{{ url_for('seller') }}">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px"
+                    alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('seller') }}" title="home"><img
+                        src="{{ url_for('static', filename='images/house-solid.svg') }}" width="23px"
+                        alt="Account"></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#" title="notification"><img
+                        src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                        alt="notification"></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="message" onclick="showMessageModal()">
+                            <img src="{{ url_for('static', filename='images/messages.png') }}" width="23px" alt="message">
+                        </a>
+                    </li>            
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('accountseller') }}" title="account"><img
+                        src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px"
+                        alt="Account"></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout"
+                        onclick="confirmLogout(event);"><img
+                        src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="24px"
+                        alt="logout"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Nav Sub Buttons -->
+        <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('seller') }}" id="homebtn" style="color: blue;">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('orders') }}" id="ordersbtn">Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('requests') }}" id="requestsbtn">Requests</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('sellersales') }}" id="sellersalesbtn">Sales Report</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Modal for displaying sender name -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable custom-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Messages</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="messageContainer">
+                        <!-- Unique sender names will populate here -->
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Send Message  to Buyer Modal -->
+    <div class="modal fade" id="buyerModal" tabindex="-1" aria-labelledby="buyerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content buyer-modal-content">
+                <div class="modal-header buyer-modal-header">
+                    <p class="modal-title" id="buyerModalLabel">Message</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="buyerMessageContent">
+                    <p class="user-id">User ID: ${msg.user_id}</p>
+                    <!-- Messages will dynamically load here -->
+                    <p>Loading...</p>
+                </div>
+                <div class="modal-footer buyer-modal-footer">
+                    <div class="reply-container">
+                        <input type="text" id="sellerReplyInput" class="form-control reply-input">
+                        <button type="button" class="btn btn-primary reply-button" onclick="sendReply()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-------------------- Modal for Notification ------------------->
+    
+    <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                        <span aria-hidden="true" style="color: rgb(58, 57, 57);">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <div class="notification-item mb-3">
+                                <a href="{{ notification['link'] }}" class="notification-link">
+                                    <p><strong>{{ notification['message'] }}</strong></p>
+                                    <small class="text-muted">{{ notification['created_at'] }}</small>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No new notifications.</p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
+    <div class="row1">
+        <div class="cards">
+            <div class="numberofproducts">
+                <h5>Total Products</h5>
+                <h1 id="totalProductsCount">{{ products|length }}</h1> <!-- Display the number of products -->
+            </div>
+    
+            <div class="soldproducts">
+                <h5>Sold Products</h5>
+                <h1>{{ sold_products_qty }}</h1>
+            </div>
+
+            <div class="shopratings">
+                <h5>Shop Ratings</h5>
+                <h1>{{ shop_ratings }}</h1>
+            </div>
+    
+            <div class="totalincome">
+                <h5>Total Income</h5>
+                <h3>₱{{ total_income }}</h3>
+            </div>
+    
+            <div class="totalValue">
+                <h5>Total Value</h5>
+                <h3 id="totalValue">0</h3>
+            </div>
+
+        </div>
+    </div>
+    
+    
+
+    <!--------------------------------------------------------Product Code-------------------------------------------------------------->
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+
+    <!-- Products Table -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Product List</h2>
+
+        <!-- Container Div for Add Product Button and Search Bar -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <!-- Search Bar -->
+            <form class="form-inline my-2 my-lg-0 custom-search">
+                <div class="input-group">
+                    <input class="form-control" type="search" id="search" name="search" placeholder="Search here..">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="search-icon">
+                            <img src="{{ url_for('static', filename='images/search.svg') }}" width="25px"
+                                alt="Search Icon">
+                        </span>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Export CSV Button -->
+            <button type="button" class="btn btn-primary" onclick="exportTableToCSV('PetCornerProducts.csv')">
+                Export CSV
+            </button>
+
+            <!-- Add Product Button -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">
+                Add New Product
+            </button>
+        </div>
+
+        <!-- Products Table List -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stocks</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.productid }}</td>
+                    <td>{{ product.productname }}</td>
+                    <td>{{ product.productdescription }}</td>
+                    <td>{{ product.productcategory }}</td>
+                    <td>₱{{ product.productprice }}</td>
+                    <td>{{ product.productstocks }}</td>
+                    <td><img src="{{ url_for('static', filename='images/' + product.productimage) }}" width="100"
+                            alt="{{ product.productname }}"></td>
+                    <td>
+                        <!-- Update Button (triggers modal) -->
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" title="update product"
+                            data-target="#updateProductModal{{ product.productid }}">
+                            <img src="{{ url_for('static', filename='images/pen-solid.svg') }}" width="15px"
+                                alt="update"></button>
+
+                        <!-- Archive Button -->
+                        <form action="{{ url_for('archive_product', productid=product.productid) }}" method="POST"
+                            style="display:inline;" onsubmit="return confirmArchive();">
+                            <button type="submit" class="btn btn-warning btn-sm" title="archive product">
+                                <img src="{{ url_for('static', filename='images/bxs-archive-in.svg') }}" width="15px"
+                                    alt="archive">
+                            </button>
+                        </form>
+
+
+                    </td>
+
+                </tr>
+
+                <!-- Update Product Modal -->
+                <div class="modal fade" id="updateProductModal{{ product.productid }}" tabindex="-1"
+                    aria-labelledby="updateProductModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="{{ url_for('update_products', productid=product.productid) }}" method="POST"
+                                enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="productname">Product Name</label>
+                                        <input type="text" class="form-control" id="productname" name="productname"
+                                            value="{{ product.productname }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productdescription">Product Description</label>
+                                        <textarea class="form-control" id="productdescription" name="productdescription"
+                                            rows="3" required>{{ product.productdescription }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productcategory">Select Product Category</label>
+                                        <select class="form-control" id="productcategory" name="productcategory"
+                                            required>
+                                            <option value="Dog Food & Treats" {% if product.productcategory=='Dog' %} selected {%
+                                                endif %}>Dog Food & Treats</option>
+                                            <option value="CatLitter & Accessories" {% if product.productcategory=='Cat' %} selected {%
+                                                endif %}>Cat Litter & Accessories</option>
+                                            <option value="Aquarium & Food" {% if product.productcategory=='Fish' %} selected {%
+                                                endif %}>Aquarium & Food</option>
+                                            <option value="Bird Feeders & Food" {% if product.productcategory=='Bird' %} selected {%
+                                                endif %}>Bird Feeders & Food</option>
+                                            <option value="Pet Grooming" {% if product.productcategory=='Bird' %} selected {%
+                                                endif %}>Pet Grooming</option>
+                                            <option value="Pet Care & Wellness" {% if product.productcategory=='Bird' %} selected {%
+                                                endif %}>Pet Care & Wellness</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productprice">Price</label>
+                                        <input type="number" class="form-control" id="productprice" name="productprice"
+                                            step="0.01" value="{{ product.productprice }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productstocks">Stocks</label>
+                                        <input type="number" class="form-control" id="productstocks"
+                                            name="productstocks" value="{{ product.productstocks }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productimage">Product Image</label>
+                                        <input type="file" class="form-control-file" id="productimage"
+                                            name="productimage">
+                                        <small>Leave blank to keep current image.</small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success">Update Product</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addProductForm" action="{{ url_for('add_product') }}" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="productname">Product Name</label>
+                            <input type="text" class="form-control" id="productname" name="productname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productdescription">Product Description</label>
+                            <textarea class="form-control" id="productdescription" name="productdescription" rows="3"
+                                required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productcategory">Category</label>
+                            <select class="form-control" id="productcategory" name="productcategory" required>
+                                <option value="">Select Product Category</option>
+                                <option value="Dog Food & Treats">Dog Food & Treats</option>
+                                <option value="Cat Litter & Accessories">Cat Litter & Accessories</option>
+                                <option value="Aquarium & Food">Aquarium & Food</option>
+                                <option value="Bird Feeders & Food">Bird Feeders & Food</option>
+                                <option value="Pet Grooming">Pet Grooming</option>
+                                <option value="Pet Care & Wellness">Pet Care & Wellness</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productprice">Price</label>
+                            <input type="number" class="form-control" id="productprice" name="productprice" step="0.01"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productstocks">Stocks</label>
+                            <input type="number" class="form-control" id="productstocks" name="productstocks" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productimage">Product Image</label>
+                            <input type="file" class="form-control-file" id="productimage" name="productimage" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+
+    <script>
+
+        function confirmArchive() {
+            return confirm('Are you sure you want to archive this product?');
+        }
+
+        function confirmLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = "{{ url_for('login') }}";
+            }
+        }
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+
+        }
+    </script>
+
+    <!-- Count the total number and value of products script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Select the tbody element that contains the product rows
+            const productTableBody = document.querySelector("table tbody");
+
+            if (productTableBody) {
+                // Count the number of product rows (tr elements)
+                const totalProducts = productTableBody.querySelectorAll("tr").length;
+
+                // Update the Total Products count in the card
+                document.getElementById("totalProductsCount").textContent = totalProducts;
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Select all product rows
+            const productRows = document.querySelectorAll("#productTableBody tr");
+            let totalValue = 0;
+
+            productRows.forEach(row => {
+                const priceCell = row.querySelector("td:nth-child(5)"); // Price column
+                const stockCell = row.querySelector("td:nth-child(6)"); // Stock column
+
+                if (priceCell && stockCell) {
+                    // Extract price and stock as numbers
+                    const price = parseFloat(priceCell.textContent.replace(/[^0-9.-]+/g, ""));
+                    const stock = parseInt(stockCell.textContent);
+
+                    // Ensure valid numbers before calculation
+                    if (!isNaN(price) && !isNaN(stock)) {
+                        totalValue += price * stock; // Calculate total value for this product
+                    }
+                }
+            });
+
+            // Format total value with comma separators
+            const formattedValue = totalValue.toLocaleString("en-US", {
+                style: "currency",
+                currency: "PHP"
+            });
+
+            // Update the Total Value card
+            document.getElementById("totalValue").textContent = formattedValue;
+        });
+    </script>
+
+    <!-- Search product JS -->
+    <script>
+        // Store the total product count
+        const totalProductsCount = document.querySelectorAll("#productTableBody tr").length;
+        document.getElementById("totalProductsCount").textContent = totalProductsCount;
+
+        // Function to filter products based on the search input
+        function filterProducts() {
+            const searchInput = document.getElementById("search").value.toLowerCase();
+            const productTableBody = document.getElementById("productTableBody");
+            const rows = productTableBody.getElementsByTagName("tr");
+
+            // If the search input is empty, show all products
+            if (searchInput === "") {
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].style.display = ""; // Show all rows
+                }
+                return; // Exit the function
+            }
+
+            // Filter products based on search input
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                let matchFound = false;
+
+                // Loop through the cells of each row to check for a match
+                for (let j = 1; j < cells.length; j++) { // Start from 1 to skip the ID column
+                    const cellValue = cells[j].textContent.toLowerCase();
+                    if (cellValue.includes(searchInput)) {
+                        matchFound = true;
+                        break; // Stop checking once a match is found
+                    }
+                }
+
+                // Show or hide the row based on whether a match was found
+                rows[i].style.display = matchFound ? "" : "none";
+            }
+        }
+
+        // Attach the filterProducts function to the search input's keyup event
+        document.getElementById("search").addEventListener("keyup", filterProducts);
+    </script>
+
+    <!-- Export table to CSV -->
+    <script>
+        function exportTableToCSV(filename) {
+            const csv = [];
+            const rows = document.querySelectorAll("table tr");
+
+            // Loop through table rows to extract data
+            rows.forEach(row => {
+                const rowData = [];
+                const cells = row.querySelectorAll("th, td");
+                cells.forEach(cell => rowData.push(cell.innerText.replace(/\n/g, ' ').trim()));
+                csv.push(rowData.join(","));
+            });
+
+            // Create a CSV file from the extracted data
+            const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+
+            // Create a temporary link to trigger the download
+            const downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(csvFile);
+            downloadLink.download = filename;
+
+            // Programmatically click the link to start download
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+    </script>
+
+    <script>  // for notification
+        document.querySelector("[title='notification']").addEventListener("click", function(event) {
+            event.preventDefault();
+            $('#notificationModal').modal('show');
+        });
+    </script>
+
+    <script>  // for notification
+        document.querySelector("[title='message']").addEventListener("click", function(event) {
+            event.preventDefault();
+            $('#messageModal').modal('show');
+        });
+    </script>
+
+    <script> // for notification
+    
+        function checkForNewApplications() {
+            fetch('/seller')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.newApplications) {
+                        // Display notification modal
+                        document.getElementById('notificationModal').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error checking new applications:', error));
+        }
+
+        // Poll the server every 10 seconds
+        setInterval(checkForNewApplications, 10000);
+
+    </script>
+
+<!------------------------- message ------------------------->
+    <script>
+        function openMessageModal() {
+            const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+            messageModal.show();
+        }
+    </script>
+
+    <script>const modal = document.getElementById('messageModal');
+        const openIcon = document.getElementById('openModalIcon');
+        
+        openIcon.addEventListener('click', () => {
+            modal.classList.add('show'); // Add the 'show' class to display the modal
+        });
+    </script>
+
+    <script>
+        function showMessageModal() {
+            fetch('/fetch_messages')
+                .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+                })
+                .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    const messageContainer = document.getElementById('messageContainer');
+                    messageContainer.innerHTML = ''; // Clear previous content
+
+                    const uniqueSenders = new Set();
+
+                    data.messages.forEach(msg => {
+                    if (!uniqueSenders.has(msg.sender_name)) {
+                        uniqueSenders.add(msg.sender_name);
+
+                        const senderDiv = document.createElement('div');
+                        senderDiv.classList.add('msg');
+                        senderDiv.innerHTML = `<p style="cursor:pointer; color:blue;" onclick="loadBuyerMessages('${msg.sender_name}')">${msg.sender_name}</p>`;
+                        messageContainer.appendChild(senderDiv);
+                    }
+                    });
+
+                    const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+                    messageModal.show();
+                }
+                })
+                .catch(error => console.error('Error fetching messages:', error));
+        }
+
+        let selectedUserId = null; // Declare globally to track the selected user ID
+
+        function loadBuyerMessages(senderName, userId) {
+            selectedUserId = userId; // Dynamically store the user ID properly
+            console.log("Selected user ID set to:", selectedUserId);
+
+            fetch(`/fetch_buyer_messages/${encodeURIComponent(senderName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched data:', data); // Debugging log to ensure data is fetched correctly
+
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        const buyerMessageContent = document.getElementById('buyerMessageContent');
+                        buyerMessageContent.innerHTML = ''; // Clear previous messages
+
+                        if (data.messages.length > 0) {
+                            data.messages.forEach(msg => {
+                                console.log('Message data:', msg);
+
+                                const senderRole = msg.sender_role; // Ensure `sender_role` is part of the message object
+
+                                const div = document.createElement('div');
+
+                                if (senderRole === 'seller') {
+                                    // Display only message_text and timestamp for sellers
+                                    div.innerHTML = `
+                                        <div class="message-item">
+                                            <div class="details-container">
+                                                <p class="buyer-message"> ${msg.message_text}</p>
+                                                <p class="timestamp">${msg.timestamp}</p>
+                                            </div>
+                                        </div>
+                                    `;
+                                } else {
+                                    // Render full details for non-seller roles
+                                    const orderDetails = msg.order_details;
+
+                                    let productImageSrc = '';
+                                    if (orderDetails && orderDetails.productimage) {
+                                        productImageSrc = `/static/images/${orderDetails.productimage}`;
+                                    }
+
+                                    div.innerHTML = `
+                                        <div class="message-item">
+                                            <div class="image-container">
+                                                ${productImageSrc ? `<img src="${productImageSrc}" alt="Product Image">` : ''}
+                                            </div>
+                                            <div class="details-container">
+                                                <div class="name-price">
+                                                    <p class="product-name">Product: ${orderDetails?.productname || 'Unknown'}</p>
+                                                    <p class="product-price">Price: ₱${orderDetails?.productprice || 'Unknown'}</p>
+                                                </div>
+                                                <p class="buyer-message"> ${msg.message_text}</p>
+                                                <p class="timestamp">${msg.timestamp}</p>
+                                                <p style="display:none;" class="order-id">Order ID: ${msg.order_id || 'N/A'}</p>
+                                                <p style="display:none;" class="user-id">User ID: ${msg.user_id || 'N/A'}</p>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+
+                                buyerMessageContent.appendChild(div);
+                            });
+                        } else {
+                            buyerMessageContent.innerHTML = `<p>No messages found for ${senderName}</p>`;
+                        }
+
+                        // Trigger modal display
+                        const buyerModal = new bootstrap.Modal(document.getElementById('buyerModal'));
+                        buyerModal.show();
+                    }
+                })
+                .catch(error => console.error('Error fetching buyer messages:', error));
+        }
+
+   
+    </script>
+
+    <script>
+       
+       function sendReply() {
+            const userIdElement = document.querySelector('.user-id'); // Fetch user ID directly from the modal
+            const userId = userIdElement?.textContent?.replace('User ID: ', '').trim();
+
+            if (!userId) {
+                alert('No buyer selected. Please open a buyer message first!');
+                return;
+            }
+
+            console.log('User ID found in modal:', userId);
+
+            const replyText = document.getElementById('sellerReplyInput').value.trim();
+            if (!replyText) {
+                alert('Cannot send an empty message!');
+                return;
+            }
+
+            fetch('/reply_message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user_id: userId,
+                    message_text: replyText
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+                if (data.success) {
+                    // Clear the input field
+                    document.getElementById('sellerReplyInput').value = '';
+
+                    // Add the reply to the modal instantly
+                    const buyerMessageContent = document.getElementById('buyerMessageContent');
+
+                    // Create a new message element
+                    const replyDiv = document.createElement('div');
+                    replyDiv.innerHTML = `
+                        <div class="message-item">
+                            <div class="details-container">
+                                <p class="buyer-message">${replyText}</p>
+                                <p class="timestamp">${new Date().toLocaleString()}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    // Append the new message to the modal content
+                    buyerMessageContent.appendChild(replyDiv);
+
+                    // Scroll to the bottom of the modal to show the new message
+                    buyerMessageContent.scrollTop = buyerMessageContent.scrollHeight;
+                } else {
+                    alert('Failed to send reply!');
+                }
+            })
+            .catch(err => console.error('Error sending reply:', err));
+        }
+
+    </script>
+
+
+</body>
+
+</html>

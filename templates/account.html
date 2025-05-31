@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Account</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='account.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="mainnavbar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" id="Homepage">
+            <a class="navbar-brand" href="{{ url_for('show_products')}}">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#" title="notification">
+                        <img src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="25px"alt="notification"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('cart')}}" title="cart">
+                        <img src="{{ url_for('static', filename='images/cart-solid.svg') }}" width="28px" alt="cart"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('my_orders')}}" title="my orders">
+                        <img src="{{ url_for('static', filename='images/order.png') }}" width="25px" alt="my orders"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account')}}" title="account">
+                        <img src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px" alt="Account"></a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout" onclick="confirmLogout(event);">
+                        <img src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="23px" alt="logout"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Nav Sub Buttons -->
+        <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products')}}" id="homebtn">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products')}}#Allproducts" id="productsbtn">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products')}}#categories" id="categoriesbtn">Categories</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!------------------ Modal for Notification ----------------->
+
+    <div class="modal fade modal-right" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <div class="notification-item mb-3 d-flex align-items-center justify-content-between" id="notification-{{ notification.id }}">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="{{ notification[1] }}" class="notification-link">
+                                    <p><strong>{{ notification[0] }}</strong></p>
+                                    <small class="text-muted">{{ notification[2] }}</small>
+                                </a>
+                                <button type="button" class="btn btn-link close-notification" data-notification-id="{{ notification.id }}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No new notifications.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="accountdetails">
+        <div class="container mt-5">
+            <div class="profile">
+                <div class="profile-header text-center">
+                    <div class="profile-image" onclick="document.getElementById('profile-pic-upload').click();">
+                        <img id="profile-pic" 
+                            src="{{ 'data:image/jpeg;base64,' + profile_image if profile_image else url_for('static', filename='images/noprof.png') }}" 
+                            alt="Profile Picture" class="rounded-circle" width="150" height="150">
+                            <input type="file" id="profile-pic-upload" accept="image/*" style="display: none;" onchange="uploadProfilePic()">
+                            
+                            <h2 class="username">{{ user_info[1] }}</h2>
+                            <p class="email">{{ user_info[3] }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-tabs mt-4">
+                    <ul class="nav nav-pills justify-content-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#addresses">My Address</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#settings">Settings</a>
+                        </li>
+                    </ul>
+                </div>
+    
+                <div class="tab-content mt-4">
+                    <div id="addresses" class="tab-pane fade show active">
+                        <h4>Saved Address</h4>
+                        <!-- Display user's address -->
+                        <div id="address-display" class="border p-3 mb-3">
+                            <p id="address-text">{{ user_info[8] }}</p>
+                        </div>
+                    </div>
+
+    
+                    <div id="settings" class="tab-pane fade">
+                        <h4>Account Settings</h4>
+                        <form id="settings-form" method="POST">
+                            <!-- <input type="hidden" > -->
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="userid" value="{{ user_info[0] }}" style="display: none;" required readonly>
+                                   
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="name" value="{{ user_info[1] }}" required readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="update-name-btn" title="update"><img src="{{ url_for('static', filename='images/pen-solid.svg') }}" width="15px"
+                                            alt="update"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="username" value="{{ user_info[2] }}" required readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="update-username-btn"><img src="{{ url_for('static', filename='images/pen-solid.svg') }}" width="15px"
+                                            alt="update"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <div class="input-group">
+                                    <input type="email" class="form-control" id="email" value="{{ user_info[3] }}" required readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="update-email-btn"><img src="{{ url_for('static', filename='images/pen-solid.svg') }}" width="15px"
+                                            alt="update"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="password" value="{{ user_info[4] }}"  required readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="update-password-btn" onclick="confirmPasswordChange()" ><img src="{{ url_for('static', filename='images/pen-solid.svg') }}" width="15px"
+                                            alt="update"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phonenumber">Phone Number</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="phonenumber" value="{{ user_info[5] }}" required readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="update-phonenumber-btn"><img src="{{ url_for('static', filename='images/pen-solid.svg') }}" width="15px"
+                                            alt="update"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="birthday">Birthday</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" id="birthday" value="{{ user_info[6] }}" required readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="update-birthday-btn"><img src="{{ url_for('static', filename='images/pen-solid.svg') }}" width="15px"
+                                            alt="update"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <div class="input-group">
+                                    <select id="update-gender-btn" name="gender" class="form-control" required readonly>
+                                        <option value="" disabled>Select your gender</option>
+                                        <option value="male" {% if user_info[7] == 'male' %}selected{% endif %}>Male</option>
+                                        <option value="female" {% if user_info[7] == 'female' %}selected{% endif %}>Female</option>
+                                        <option value="other" {% if user_info[7] == 'other' %}selected{% endif %}>Other</option>
+                                    </select>
+                                
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="update-gender-btn"><img src="{{ url_for('static', filename='images/pen-solid.svg') }}" width="15px"
+                                            alt="update"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-success" type="button" id="saveProfileBtn">Save Changes</button>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+ 
+    
+  
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+        function confirmLogout(event) {
+            event.preventDefault();  
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = "{{ url_for('logout') }}"; 
+            }
+        }
+
+        // Enable editing for each field when the respective update button is clicked
+        document.querySelectorAll('.input-group-append button').forEach(button => {
+            button.addEventListener('click', function() {
+                const inputField = this.parentElement.previousElementSibling;
+                inputField.removeAttribute('readonly');
+                inputField.focus();
+            });
+        });
+
+        // Function to handle profile picture upload
+        function uploadProfilePic() {
+            const fileInput = document.getElementById('profile-pic-upload');
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profile-pic').src = e.target.result;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+                // Implement the AJAX call or form submission here to save the profile picture in the database
+            }
+        }
+
+    </script>
+
+    <script>  // for notification
+        document.querySelector("[title='notification']").addEventListener("click", function(event) {
+            event.preventDefault();
+            $('#notificationModal').modal('show');
+        });
+    </script>
+
+    <script> // for notification
+    
+        function checkForNewApplications() {
+            fetch('/get_new_applications')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.newApplications) {
+                        // Display notification modal
+                        document.getElementById('notificationModal').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error checking new applications:', error));
+        }
+
+        // Poll the server every 10 seconds
+        setInterval(checkForNewApplications, 10000);
+
+    </script>
+
+  
+
+  
+ 
+
+  
+
+</body>
+</html>
+
+
+

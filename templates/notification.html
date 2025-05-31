@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Notification</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='notification.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="mainnavbar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" id="Homepage">
+            <a class="navbar-brand" href="{{ url_for('show_products')}}">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Search Bar -->
+                <form class="form-inline my-2 my-lg-0 mx-auto custom-search">
+                    <div class="input-group">
+                        <input class="form-control" type="search" id="search" name="search" placeholder="Search here..">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="search-icon">
+                                <img src="{{ url_for('static', filename='images/search.svg') }}" width="25px" alt="Search Icon">
+                            </span>
+                        </div>
+                    </div>
+                </form>
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products')}}" title="home"><img src="{{ url_for('static', filename='images/house-solid.svg') }}" width="25px" alt="home"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><img src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="25px" alt="notification"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('cart')}}"><img src="{{ url_for('static', filename='images/cart-solid.svg') }}" width="28px" alt="cart"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account')}}"><img src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px" alt="Account"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" onclick="confirmLogout(event);">
+                        <img src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="23px" alt="logout"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Nav Sub Buttons -->
+        <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products')}}" id="homebtn">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products')}}" id="productsbtn">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products')}}" id="categoriesbtn">Categories</a></li>
+            </ul>
+        </div>
+
+    </div>
+ 
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+         function confirmLogout(event) {
+            event.preventDefault();  
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = "{{ url_for('logout') }}"; 
+            }
+        }
+    </script>
+
+   
+
+  
+
+</body>
+</html>

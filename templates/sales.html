@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Corner | Admin - Sales Report</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sales.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="mainnavbar">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" width="220px" alt="Pet Corner Logo">
+            </a>
+            <div class="navbar-collapse collapse show" id="navbarNav">
+
+                <!-- Nav Icons -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- <li class="nav-item"><a class="nav-link" href="#" title="home"><img
+                        src="{{ url_for('static', filename='images/house-solid.svg') }}" width="23px"
+                        alt="Account"></a>
+                    </li> -->
+                    <li class="nav-item"><a class="nav-link" href="#" id="notification-icon" title="notification"><img
+                        src="{{ url_for('static', filename='images/bell-solid.svg') }}" width="23px"
+                        alt="Notification Icon"></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('accountseller') }}" title="account"><img
+                        src="{{ url_for('static', filename='images/user-solid.svg') }}" width="23px"
+                        alt="Account"></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}" title="logout" onclick="confirmLogout(event);"><img
+                        src="{{ url_for('static', filename='images/logout-solid.svg') }}" width="24px"
+                        alt="logout"></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+         <!-- Nav Sub Buttons -->
+         <div class="NavSubButtons">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item"><a class="nav-link" href="{{url_for('sales')}}" style="color: blue;">Sales Report</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('admin')}}">Sellers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('display_buyer_info')}}">Buyers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('display_product_info')}}">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('new_seller')}}">Seller Application</a></li>
+               
+            </ul>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button> -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% for notification in notifications %}
+                        <div class="notification-item">
+                            <a href="{{ notification.link }}" class="notification-link">{{ notification.message }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row1"> </div>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Sales Report -->
+    <div class="container mt-5">
+        <div class="card-container">
+            <div class="card">
+                <div class="icon-placeholder">
+                    <img src="{{ url_for('static', filename='images/order-black.png') }}" alt="Orders Icon">
+                </div>
+                <h3>Total Orders</h3>
+                <p>{{ total_orders }}</p>
+            </div>
+            <div class="card">
+                <div class="icon-placeholder">
+                    <img src="{{ url_for('static', filename='images/income-graph.png') }}" alt="Revenue Icon">
+                </div>
+                <h3>Total Revenue</h3>
+                <p>₱{{ total_revenue | round(2) }}</p>
+            </div>
+            <div class="card">
+                <div class="icon-placeholder">
+                    <img src="{{ url_for('static', filename='images/price-tag.png') }}" alt="Products Sold Icon">
+                </div>
+                <h3>Total Products Sold</h3>
+                <p>{{ total_products_sold }}</p>
+            </div>
+            <div class="card">
+                <div class="icon-placeholder">
+                    <img src="{{ url_for('static', filename='images/admin.png') }}" alt="Profit Icon">
+                </div>
+                <h3>Admin Commission</h3>
+                <p>₱{{ total_admin_commission | round(2) }}</p>
+            </div>
+        </div>
+
+    <!-- Filter Container -->
+    <!-- <div class="filter-container">
+        <div class="filter-section">
+            <label>
+                <input type="radio" name="filter" value="orders" checked> Orders
+            </label>
+            <label>
+                <input type="radio" name="filter" value="products"> Products
+            </label>
+        </div>
+        <div class="date-range">
+            <label for="start-date">Date Range</label>
+            <div class="date-inputs">
+                <input type="date" id="start-date" name="start-date">
+                <span class="separator">to</span>
+                <input type="date" id="end-date" name="end-date">
+            </div>
+        </div>
+        <button class="ok-btn" id="ok-btn" disabled>OK</button>
+        <button class="ok-btn" id="ok-btn" disabled>Clear Filter</button>
+    </div> -->
+
+    <!-- Filter Container -->
+    <div class="filter-container">
+        <!-- <div class="filter-section">
+            <label>
+                <input type="radio" name="filter" value="orders" checked> Orders
+            </label>
+            <label>
+                <input type="radio" name="filter" value="products"> Products
+            </label>
+        </div> -->
+        <div class="date-range">
+            <label for="start-date">Date Range</label>
+            <div class="date-inputs">
+                <input type="date" id="start-date" name="start-date">
+                <span class="separator">to</span>
+                <input type="date" id="end-date" name="end-date">
+            </div>
+        </div>
+        <button class="ok-btn" id="ok-btn" disabled>OK</button> <!-- Ok button -->
+        <button class="ok-btn" id="clear-btn" disabled>Clear Filter</button> <!-- Clear Filter button -->
+        <button class="ok-btn" id="print-btn">Print</button> <!-- Print button -->
+    </div>
+
+    <!-- By Orders -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th id="date-header">Transaction Date <span class="sort-icon">↕</span></th>
+                <th>Order ID</th>
+                <th>Product Name</th>
+                <th>Seller</th>
+                <th>Buyer</th>
+                <th>Subtotal</th>
+                <th>Seller Profit</th>
+                <th id="commission-header">Admin Commission <span class="sort-icon">↕</span></th>
+            </tr>
+        </thead>
+        <tbody id="tablesellersales">
+            {% for order in order_sales %}
+            <tr id="row-{{ order[1] }}"> <!-- Order ID as row ID -->
+                <td>{{ order[0] }}</td> <!-- Received Date -->
+                <td>{{ order[1] }}</td> <!-- Order ID -->
+                <td>{{ order[2] }}</td> <!-- Product Name -->
+                <td>{{ order[3] }}</td> <!-- Seller ID -->
+                <td>{{ order[4] }}</td> <!-- User ID -->
+                <td>{{ order[5] }}</td> <!-- Subtotal -->
+                <td>{{ order[6] }}</td> <!-- Seller Income -->
+                <td>{{ order[7] }}</td> <!-- Admin Income -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        }
+    </script>
+    
+    <script> //code for search field
+
+        function filterProducts() {
+            const searchInput = document.getElementById("search").value.toLowerCase();
+            const productTableBody = document.getElementById("productTableBody");
+            const rows = Array.from(productTableBody.getElementsByTagName("tr"));
+
+            // Clear any previous matches to start fresh
+            rows.forEach(row => row.style.display = "");
+
+            // If search input is empty, show all rows
+            if (searchInput === "") {
+                rows.forEach(row => productTableBody.appendChild(row));
+                return;
+            }
+
+            // Filter rows based on the search term
+            const matchingRows = rows.filter(row => {
+                const cells = row.getElementsByTagName("td");
+                return Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchInput));
+            });
+
+            // Hide all rows and only show the matching ones
+            rows.forEach(row => row.style.display = "none");
+            matchingRows.forEach(row => row.style.display = "");
+
+            // Append matching rows to the top of the table
+            matchingRows.forEach(row => productTableBody.insertBefore(row, productTableBody.firstChild));
+        }
+
+        // Attach the filterProducts function to the search input's keyup event
+        document.getElementById("search").addEventListener("keyup", filterProducts);
+
+    </script>
+
+    <script>   // Open modal when the notification icon is clicked
+    
+        document.getElementById('notification-icon').addEventListener('click', function (event) {
+            event.preventDefault();
+            $('#notificationModal').modal('show');
+        });
+
+    </script>
+
+    <script> // display notification
+        function checkForNewApplications() {
+            fetch('/get_new_applications')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.newApplications) {
+                        // Display notification modal
+                        document.getElementById('notificationModal').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error checking new applications:', error));
+        }
+
+        // Poll the server every 10 seconds
+        setInterval(checkForNewApplications, 10000);
+    </script>
+
+    <!-- <script>
+        // Enable the "OK" button when both start and end dates are selected
+        document.getElementById("start-date").addEventListener("change", checkDateInputs);
+        document.getElementById("end-date").addEventListener("change", checkDateInputs);
+        
+        function checkDateInputs() {
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
+            const okButton = document.getElementById("ok-btn");
+            if (startDate && endDate) {
+                okButton.disabled = false;
+            } else {
+                okButton.disabled = true;
+            }
+        }
+        
+        // Filter the orders based on the selected date range
+        document.getElementById("ok-btn").addEventListener("click", function() {
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
+        
+            const rows = document.querySelectorAll("#tablesellersales tr");
+            rows.forEach(row => {
+                const receivedDate = row.cells[0].innerText; // Assuming the received date is in the first column
+                if (receivedDate) {
+                    const orderDate = new Date(receivedDate);
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+        
+                    // Check if the order date is within the range
+                    if (orderDate >= start && orderDate <= end) {
+                        row.style.display = ""; // Show the row
+                    } else {
+                        row.style.display = "none"; // Hide the row
+                    }
+                }
+            });
+        });
+    </script> -->
+
+    <script>
+        // Enable the "OK" and "Clear Filter" buttons when the date range is selected
+        document.getElementById("start-date").addEventListener("change", checkDateInputs);
+        document.getElementById("end-date").addEventListener("change", checkDateInputs);
+        
+        function checkDateInputs() {
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
+            const okButton = document.getElementById("ok-btn");
+            const clearButton = document.getElementById("clear-btn");
+            
+            if (startDate && endDate) {
+                okButton.disabled = false;
+                clearButton.disabled = false; // Enable "Clear Filter" button
+            } else {
+                okButton.disabled = true;
+                clearButton.disabled = true; // Disable "Clear Filter" button if no range selected
+            }
+        }
+        
+        // Filter the orders based on the selected date range
+        document.getElementById("ok-btn").addEventListener("click", function() {
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
+        
+            const rows = document.querySelectorAll("#tablesellersales tr");
+            rows.forEach(row => {
+                const receivedDate = row.cells[0].innerText; // Assuming the received date is in the first column
+                if (receivedDate) {
+                    const orderDate = new Date(receivedDate);
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+        
+                    // Check if the order date is within the range
+                    if (orderDate >= start && orderDate <= end) {
+                        row.style.display = ""; // Show the row
+                    } else {
+                        row.style.display = "none"; // Hide the row
+                    }
+                }
+            });
+        });
+        
+        // Clear the date filter when the "Clear Filter" button is clicked
+        document.getElementById("clear-btn").addEventListener("click", function() {
+            // Reset the date inputs
+            document.getElementById("start-date").value = "";
+            document.getElementById("end-date").value = "";
+        
+            // Disable the "Clear Filter" button and enable the "OK" button
+            document.getElementById("ok-btn").disabled = true;
+            document.getElementById("clear-btn").disabled = true;
+        
+            // Show all rows in the table
+            const rows = document.querySelectorAll("#tablesellersales tr");
+            rows.forEach(row => {
+                row.style.display = ""; // Show all rows
+            });
+        });
+    </script>
+    
+    <!-- PRINT -->
+    <script>
+    document.getElementById("print-btn").addEventListener("click", function () {
+        const table = document.querySelector(".table");
+
+        const printWindow = window.open('', '', 'height=900,width=1200');
+
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString("en-PH", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
+
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Sales Report</title>
+                    <style>
+                        @page {
+                            size: A4;
+                            margin: 40px;
+                        }
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            color: #333;
+                            counter-reset: page;
+                        }
+                        .header {
+                            text-align: center;
+                            margin-bottom: 40px;
+                        }
+                        .logo {
+                            max-width: 150px;
+                            margin-bottom: 10px;
+                        }
+                        .report-title {
+                            font-size: 28px;
+                            font-weight: bold;
+                            margin: 0;
+                        }
+                        .date-generated {
+                            font-size: 14px;
+                            color: #666;
+                            margin-top: 5px;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                            page-break-inside: auto;
+                        }
+                        th, td {
+                            border: 1px solid #000;
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                        /* Footer for page numbers */
+                        @media print {
+                            body {
+                                margin-bottom: 50px;
+                            }
+                            .footer {
+                                position: fixed;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                height: 30px;
+                                text-align: center;
+                                font-size: 12px;
+                                color: #666;
+                            }
+                            .footer:after {
+                                counter-increment: page;
+                                content: "Page " counter(page);
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <img src="{{ url_for('static', filename='images/petcornerlogo2.png') }}" alt="Pet Corner Logo" class="logo"/>
+                        <p class="report-title">Pet Corner | Sales Report</p>
+                        <p class="date-generated">Date Generated: ${formattedDate}</p>
+                    </div>
+                    ${table.outerHTML}
+                    <div class="footer"></div>
+                </body>
+            </html>
+        `);
+
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    });
+    </script>
+
+    <script>
+    // Toggle sort directions
+    let sortDirections = {
+        0: true,  // Transaction Date (column index 0)
+        7: true   // Admin Commission (column index 7)
+    };
+
+    // Attach event listeners to the headers
+    document.addEventListener("DOMContentLoaded", () => {
+        const headers = document.querySelectorAll("th");
+
+        headers[0].style.cursor = "pointer";
+        headers[7].style.cursor = "pointer";
+
+        headers[0].addEventListener("click", () => sortTable(0));
+        headers[7].addEventListener("click", () => sortTable(7));
+    });
+
+    function sortTable(columnIndex) {
+        const table = document.querySelector(".table tbody");
+        const rows = Array.from(table.querySelectorAll("tr"));
+
+        const ascending = sortDirections[columnIndex];
+        sortDirections[columnIndex] = !ascending;
+
+        const sortedRows = rows.sort((a, b) => {
+            const aVal = a.children[columnIndex].innerText.trim();
+            const bVal = b.children[columnIndex].innerText.trim();
+
+            // Check if column is date
+            if (columnIndex === 0) {
+                return ascending
+                    ? new Date(aVal) - new Date(bVal)
+                    : new Date(bVal) - new Date(aVal);
+            }
+
+            // For Admin Commission (currency/number)
+            const aNum = parseFloat(aVal.replace(/[₱,]/g, ""));
+            const bNum = parseFloat(bVal.replace(/[₱,]/g, ""));
+            return ascending ? aNum - bNum : bNum - aNum;
+        });
+
+        // Append sorted rows
+        sortedRows.forEach(row => table.appendChild(row));
+    }
+</script>
+    
+</body>
+
+</html>

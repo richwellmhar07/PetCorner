@@ -1,0 +1,1076 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Century Gothic", sans-serif;
+
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.mainnavbar{
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    background-color: #efefe4;
+    top: 0px;
+   
+}
+
+/* Start of Carousel CSS */
+.carousel-container {
+    padding-top: 200px;
+    width: 100%;
+    max-width: 1200px; /* Updated width to 1200px */
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+}
+    
+.carousel {
+    display: flex;
+      transition: transform 0.5s ease-in-out;
+}
+    
+.carousel img {
+    width: 100%;
+    height: 430px; /* Height set to 400px */
+    border-radius: 10px;
+}
+    
+.buttons {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+    
+.prev, .next {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+    
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+    
+.dots-container {
+    text-align: center;
+    margin-top: 15px;
+}
+    
+.dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+    
+.active {
+    background-color: #717171;
+}
+/* End of Carousel CSS */
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    height: 80px;
+    background-color: #2f2f30 !important;
+}
+
+.logo {
+    padding-top: 40px;
+}
+
+nav {
+    flex: 1;
+    text-align: right;
+}
+
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+input {
+    width: 50%;
+    height: 35px;
+    padding: 2px;
+}
+
+.custom-search input#search {
+    width: 500px !important; /* Custom width with !important */
+    border-radius: 10px;
+    border: solid 1px;
+    padding-left: 10px;
+    padding-right: 40px; /* Add padding to the right for the icon */
+}
+
+.input-group {
+    position: relative; /* Position relative to place icon inside input */
+}
+
+/* Position the search icon inside the input */
+.input-group-text {
+    position: absolute;
+    top: -30;
+    right: 10px; /* Position from the right */
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+    padding: 0;
+}
+
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust color (optional) */
+    transition: transform 0.3s ease; /* Smooth transition on hover */
+}
+
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(100%); /* Fully invert the color on hover */
+}
+
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black; /* Change the color to black */
+    font-size: 15px;
+}
+
+.NavSubButtons ul li a:hover {
+    color: #412ef0;
+    cursor: pointer;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+@media (max-width: 768px) {
+    .navbar-brand img {
+        width: 150px;
+    }
+    nav ul {
+        text-align: left;
+        padding-top: 20px;
+    }
+    .input-group-prepend {
+        display: none;
+    }
+    .input-field {
+        width: 100%;
+    }
+}
+
+.NavSubButtons {
+    flex: 1;
+    text-align: center;
+    background-color: #ffc107;
+}
+
+.NavSubButtons ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 5px 0;
+    font-weight: 800;
+    font-family: Arial;
+}
+
+.NavSubButtons ul li {
+    display: inline-block;
+    margin-right: 100px;
+}
+
+/* Default link color in the navbar */
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff; /* White color by default */
+    font-family: Helvetica;
+    font-size: 18px;
+}
+
+/* Link color when hovered */
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #fbfbfb; /* Yellowish color when hovered */
+}
+
+/* Update the search icon color */
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust initial color (lighten) */
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Change the icon color on hover */
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+
+/* Icon buttons in the navbar */
+.navbar-nav .nav-link img {
+    width: 23px;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+    filter: invert(5%); /* Adjust initial color (lighten) */
+}
+
+/* Enlarge the icon and change color on hover */
+.navbar-nav .nav-link img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+
+
+/*  Products*/
+
+
+/* Start of All Products CSS */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.filter-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Even smaller grid items */
+    gap: 12px; /* Smaller space between items */
+}
+
+/* Adjusted product card styling */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Slightly less rounded corners for compactness */
+    padding: 6px; /* Smaller padding */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.product-card a {
+    text-decoration: none; /* Removes underline from links */
+    font-size: 12px;
+}
+
+/* Adjust product image size */
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    max-height: 120px; /* Further limit image height */
+    object-fit: cover; /* Ensure the image fills the space neatly */
+}
+
+/* Hover effect on product cards */
+.product-card:hover {
+    transform: scale(1.05); /* Slight scale to keep it compact */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+    text-decoration: none;
+}
+
+/* Product info section */
+.product-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4px 0; /* Smaller margin */
+    flex-grow: 1;
+}
+
+/* Price styling */
+.price {
+    font-weight: bold;
+    font-size: 12px; /* Smaller price text */
+}
+
+/* Button styling */
+.button {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 5px 8px; /* Smaller button padding */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    font-size: 12px; /* Smaller font size for button */
+}
+
+/* Hover effect for the button */
+.button:hover {
+    background-color: darkblue;
+}
+
+.price {
+    font-weight: bold;
+}
+
+.stars {
+    color: gold;
+}
+
+/* Add to Cart button */
+.button {
+    background-color: #ffc107;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Make button take full width */
+}
+
+.button:hover {
+    background-color: #f8a618;
+}
+
+/* End of All Products CSS */
+
+/* Start of Carousel CSS */
+.prev, .next {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.dots-container {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.active {
+    background-color: #717171;
+}
+/* End of Carousel CSS */
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    height: 80px;
+    background-color: #2f2f30 !important;
+}
+
+.logo {
+    padding-top: 40px;
+}
+
+nav {
+    flex: 1;
+    text-align: right;
+}
+
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+input {
+    width: 50%;
+    height: 35px;
+    padding: 2px;
+}
+
+.custom-search input#search {
+    width: 500px !important; /* Custom width with !important */
+    border-radius: 10px;
+    border: solid 1px;
+    padding-left: 10px;
+    padding-right: 40px; /* Add padding to the right for the icon */
+}
+
+.input-group {
+    position: relative; /* Position relative to place icon inside input */
+}
+
+/* Position the search icon inside the input */
+.input-group-text {
+    position: absolute;
+    top: 50%; /* Vertically center the icon */
+    right: 10px; /* Position from the right */
+    transform: translateY(-50%);
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+    padding: 0;
+}
+
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust color (optional) */
+    transition: transform 0.3s ease; /* Smooth transition on hover */
+}
+
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(100%); /* Fully invert the color on hover */
+}
+
+.NavSubButtons ul li a {
+    text-decoration: none;
+    color: black; /* Change the color to black */
+    font-size: 15px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+@media (max-width: 768px) {
+    .navbar-brand img {
+        width: 150px;
+    }
+    nav ul {
+        text-align: left;
+        padding-top: 20px;
+    }
+    .input-group-prepend {
+        display: none;
+    }
+    .input-field {
+        width: 100%;
+    }
+}
+
+/* Default link color in the navbar */
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff; /* White color by default */
+    font-family: Helvetica;
+    font-size: 18px;
+}
+
+/* Link color when hovered */
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #ffc107; /* Yellowish color when hovered */
+}
+
+/* Update the search icon color */
+#search-icon img {
+    width: 20px; /* Adjust the size of the icon */
+    height: auto; /* Ensure proportional scaling */
+    padding: 0; /* Remove padding inside the icon */
+    filter: invert(50%); /* Adjust initial color (lighten) */
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Change the icon color on hover */
+#search-icon img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+
+/* Icon buttons in the navbar */
+.navbar-nav .nav-link img {
+    width: 23px;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transition on hover */
+    filter: invert(5%); /* Adjust initial color (lighten) */
+}
+
+/* Enlarge the icon and change color on hover */
+.navbar-nav .nav-link img:hover {
+    transform: scale(1.2); /* Increase icon size on hover */
+    filter: invert(0%); /* Fully invert the color on hover (darken) */
+}
+
+/* Categories Boxes */
+.categories-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto; /* Centers the container horizontally */
+    text-align: center; /* Centers the text inside the container */
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #333;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 boxes per row */
+    gap: 20px;
+    margin-bottom: 30px;
+    justify-items: center; /* Centers each item inside the grid */
+}
+
+.category-item {
+    text-align: center;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    width: 100%; /* Ensures the items fill the available grid space */
+    max-width: 200px; /* Adjust based on how big you want each box */
+    cursor: pointer;
+}
+
+.category-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.378);
+}
+
+.category-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.category-title {
+    font-size: 0.9em;
+    color: #555;
+}
+
+
+.category-title {
+    font-size: 0.9em;
+    color: #555;
+}
+
+#modalProductImage {
+    display: block; 
+    margin-left: auto; 
+    margin-right: auto; 
+    max-width: 100%; 
+    height: auto; 
+}
+
+
+.custom-body {
+    background-color: #ffffff;
+}
+
+
+.custom-add-button {
+    display: flex;
+    background-color: #ffac27; 
+    border-radius: 7px;
+    color: #ffffff;
+    border: none;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px;
+    padding-right: 12px;
+    
+}
+.btncartimg{
+    padding-right: 10px;
+}
+
+
+.custom-add-button:hover {
+    background-color: #ce8609;
+    color: #fbfbfb;
+}
+
+
+.modal-content {
+    border-radius: 15px;
+    width: 110%;  
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 10px;  
+    overflow: hidden;  
+}
+
+
+.modal-body.custom-body {
+    padding: 5px;
+    text-align: center;
+    max-height: 80vh;  
+    overflow-y: auto;
+}
+
+
+.modal-body .img-fluid {
+    display: block;
+    margin: 0 auto 10px;
+    max-width: 100%;  
+    max-height: 200px; 
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+
+.modal-body h3#modalProductName {
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+
+.modal-body p.description-text {
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+
+.quantity-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    justify-content: flex-start;  
+}
+
+.quantity-section label {
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.modal-body p.price-text {
+    font-size: 18px;  /* Adjust price font size */
+    color: #1d1c1b;
+    font-weight: bold;
+    text-align: left;
+}
+.quantity-section .quantity-input {
+    width: 60px;  
+    height: 30px;  
+    font-size: 14px;  
+    text-align: center;
+    padding: 5px;  
+}
+.ratings{
+    font-size: 12px;
+    color: #ffc107;
+}
+.modal-body .price-stocks-section {
+    text-align: left;
+    font-size: 16px; /* Same as description-text */
+    color: #5a5a5a;  /* Same as description-text color */
+    margin-bottom: 15px; /* Same margin as description-text */
+}
+
+.modal-title{
+    padding-top: 8px;
+
+}
+
+.modal-body p.description-text {
+    font-size: 16px;
+    color: #5a5a5a;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.shop-icon {
+    height: auto;
+    margin-right: 10px;
+    
+}
+
+.productcategories{
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding: 50px;
+   
+}
+
+.categorytitle{
+    padding-bottom: 20px;
+}
+
+/*************** This code is for the close button in the product modal **************/
+.modal .close {
+    color: #000; 
+    font-size: 1.5rem;
+    opacity: 0.8; 
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.modal .close:hover {
+    color: #ffc107;  
+    opacity: 1; 
+    transform: scale(1.2); 
+    cursor: pointer; 
+}
+.modal .close:focus {
+    outline: none;
+}
+
+/* Custom CSS for Add to Cart Button */
+.add-to-cart-btn {
+    background-color: #ffc107;        
+    color: white;                      
+    padding: 10px 20px;                
+    border: none;                      
+    border-radius: 8px;               
+    font-size: 14px;                   
+    font-weight: bold;                
+    cursor: pointer;                  
+    transition: background-color 0.3s; 
+}
+.add-to-cart-btn:hover {
+    background-color: #ce8609;        
+}
+.add-to-cart-btn:focus {
+    outline: none;               
+}    
+
+
+.ShowAll-btn {
+    margin-top: 30px;
+    color: white; 
+    background-color: #ffc107; 
+    border: none; /* Removes default border */
+    padding: 10px 20px; /* Adds space inside the button */
+    font-size: 14px; /* Adjusts font size */
+    text-decoration: none; /* Removes underline from the link */
+    border-radius: 7px; /* Rounds the corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Adds hover animation */
+}
+
+.ShowAll-btn:hover {
+    background-color: #ce8609;
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Increases shadow on hover */
+    text-decoration: none;
+    color: white;
+}
+
+.ShowAll-btn:active {
+    background-color: #ce8609; /* Even darker blue when clicked */
+    transform: translateY(0); /* Resets the lift effect */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow when clicked */
+    color: white;
+}
+
+
+/* Style for the star rating */
+
+/* Style for the star rating */
+.rating {
+    display: flex;               /* Use flexbox for horizontal alignment */
+    font-size: 13px;             /* Adjust star size */
+    color: #FFD700;              /* Gold color for filled stars */
+    align-items: center;         /* Align stars vertically with the rating text */
+}
+
+.rating .fa {
+    margin-right: 2px;           /* Small space between stars */
+    color: #ccc;                 /* Default color for empty stars */
+}
+
+/* Active state for full stars */
+.rating .fa.filled {
+    color: #FFD700;              /* Gold for filled stars */
+}
+
+/* Active state for half stars */
+.rating .fa.half {
+    color: #FFD700;              /* Gold for half-filled stars */
+}
+
+.rating-text {
+    display: flex;               /* Use flexbox to place text and stars next to each other */
+    font-size: 13px;              /* Font size for the rating text */
+    align-items: center;         /* Align text and stars vertically */
+    margin-right: 8px;            /* Space between rating number and stars */
+    color: #FFD700;                 /* Color for the rating text */
+}
+
+.modal-body .stock-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.rating-qty{
+    display: flex;              /* Use flexbox */
+    justify-content: space-between; /* Distribute space between left and right */
+    align-items: center;        /* Vertically center the content */
+    padding: 10px; 
+}
+
+/************** Notification Modal *************/
+
+.modal-content {
+    display: flex;
+    border-radius: 10px;
+    width: 420px; 
+    max-width: 500px; 
+    padding: 15px;
+    overflow: hidden;
+    margin-left: auto;
+    margin-top: 8vh;
+    height: 85vh;
+    overflow-y: auto;
+}
+
+/* Modal Body */
+.modal-body {
+    max-height: 65vh;  /* Limit the height of modal-body */
+    overflow-y: auto;  /* Make only the body scrollable */
+    padding-right: 15px;  /* Add some padding to avoid cutting off the scrollbar */
+}
+
+/* Fix the modal header */
+.modal-header {
+    position: sticky;  /* Keep it fixed at the top of the modal */
+    top: 0;  /* Stick it to the top of the modal */
+    background-color: #fff;  /* Ensure the background color is solid */
+    z-index: 10;  /* Make sure it's above the scrollable content */
+}
+
+
+
+.modal-body.custom-body {
+    padding: 5px;
+    text-align: left;
+    max-height: 80vh; 
+    overflow-y: auto; 
+}
+
+/* Notification Item */
+.notification-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notification-item:hover {
+    background-color: #b8b8b8;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+
+.notification-link {
+    text-decoration: none;
+    color: inherit;  
+}
+
+
+.notification-item:hover .notification-link p {
+    color: #0a008f;  
+}
+
+
+
+.notification-item i {
+    color: #007bff;  
+
+}
+
+.notification-item i:hover {
+    color: #0056b3;  
+}
+
+.notification-item a {
+    text-decoration: none;
+    color: #333;
+}
+
+.notification-item a:hover {
+    color: #007bff; 
+}
+
+
+
+.modal-title {
+    padding-top: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.close {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Styling for Notification Text */
+.notification-link {
+    font-size: 16px;
+    color: #ff0000;
+}
+
+.notification-link p {
+    margin-bottom: 5px;
+}
+
+.notification-link small {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* If no notifications, message style */
+.modal-body p {
+    font-size: 14px;
+    color: #2a9bff;
+    text-align: center;
+}
+
+/* Media Query to Adjust for Small Screens */
+@media (max-width: 576px) {
+    .modal-content {
+        width: 90%; /* Adjust modal width for small screens */
+    }
+
+    .modal-header {
+        text-align: center;
+    }
+}
+
+.modal-right .modal-dialog {
+    position: fixed;
+    top: 20px;
+    right: 40px;
+    margin: 0;
+    width: 400px; /* Adjust the width as needed */
+    height: 100%;
+    max-width: 100%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal-right .modal-content {
+    height: 100%;
+    border-radius: 10px; /* Remove rounded corners */
+    border: none; /* Remove border */
+}
+
+.modal-right.show .modal-dialog {
+    transform: translateX(0); /* Slide in from the right */
+}
+
+
+
+
+
+
+
+
+.chat-container {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.user-message {
+    text-align: right;
+    background-color: #d1f7d1;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+.admin-message {
+    text-align: left;
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+.input-group {
+    margin-top: 10px;
+}
+
+.input-group .form-control {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.input-group .btn {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+
+.modal-search {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+}
+
+#chatSearchInput {
+    width: 100%;
+    border-radius: 20px;
+    padding: 10px;
+    outline: none;
+}
