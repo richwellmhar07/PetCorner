@@ -1,0 +1,50 @@
+SnackBar - backgroundColor: Color.fromARGB(180, 86, 87, 86)
+yellow shade - Color.fromARGB(255, 245, 214, 37)
+fonsize on the app bar 20, image size 23x23
+Yes/No Font color in message box Color.fromARGB(255, 80, 79, 79)
+
+//new Screen Teplate
+
+import 'package:flutter/material.dart';
+
+class CancelOrderScreen extends StatefulWidget {
+  const CancelOrderScreen({super.key});
+
+  @override
+  State<CancelOrderScreen> createState() => _CancelOrderScreenState();
+}
+
+class _CancelOrderScreenState extends State<CancelOrderScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 246, 241, 241),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 245, 214, 37),
+        toolbarHeight: 70,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          'Cancel Order',
+          style: TextStyle(
+            fontSize: 17,
+            color: Color.fromARGB(255, 88, 88, 88),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {
+              
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
